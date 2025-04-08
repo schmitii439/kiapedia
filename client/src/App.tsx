@@ -3,6 +3,10 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/queryClient";
 import { Toaster } from "@/components/ui/toaster";
 import { useEffect, useState, createContext } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+
+// Components
+import LoadingScreen from "@/components/LoadingScreen";
 
 // Pages
 import Home from "@/pages/Home";
@@ -32,11 +36,17 @@ function App() {
   const [location, setLocation] = useLocation();
   const [userId, setUserId] = useState<number | null>(null);
   const [username, setUsername] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Set user function for context
   const setUser = (userId: number | null, username: string | null) => {
     setUserId(userId);
     setUsername(username);
+  };
+
+  // Handle loading complete
+  const handleLoadingComplete = () => {
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -59,15 +69,28 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthContext.Provider value={{ userId, username, setUser }}>
-        <MainLayout>
-          <Switch>
-            <Route path="/" component={Home} />
-            <Route path="/topic/:id" component={TopicDetail} />
-            <Route path="/categories" component={Categories} />
-            <Route path="/category/:id" component={CategoryDetail} />
-            <Route component={NotFound} />
-          </Switch>
-        </MainLayout>
+        <AnimatePresence>
+          {isLoading ? (
+            <LoadingScreen key="loading-screen" onLoadingComplete={handleLoadingComplete} />
+          ) : (
+            <motion.div
+              key="app-content"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.7 }}
+            >
+              <MainLayout>
+                <Switch>
+                  <Route path="/" component={Home} />
+                  <Route path="/topic/:id" component={TopicDetail} />
+                  <Route path="/categories" component={Categories} />
+                  <Route path="/category/:id" component={CategoryDetail} />
+                  <Route component={NotFound} />
+                </Switch>
+              </MainLayout>
+            </motion.div>
+          )}
+        </AnimatePresence>
         <Toaster />
       </AuthContext.Provider>
     </QueryClientProvider>
