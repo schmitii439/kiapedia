@@ -25,7 +25,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       {/* Main content area */}
       <div className="flex-1 pl-4 pr-20">
         {/* Logo */}
-        <div className="py-4">
+        <div className="py-4 px-2">
           <Logo />
         </div>
         
