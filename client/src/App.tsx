@@ -8,6 +8,8 @@ import { useEffect, useState, createContext } from "react";
 import Home from "@/pages/Home";
 import ConspiracyTheories from "@/pages/ConspiracyTheories";
 import TopicDetail from "@/pages/TopicDetail";
+import Categories from "@/pages/Categories";
+import CategoryDetail from "@/pages/CategoryDetail";
 import NotFound from "@/pages/not-found";
 
 // Layout
@@ -46,6 +48,10 @@ function App() {
       title += "Verschwörungstheorien im Kontext";
     } else if (location.startsWith("/topic/")) {
       title += "Theorie Details";
+    } else if (location.startsWith("/categories")) {
+      title += "Verschwörungskategorien";
+    } else if (location.startsWith("/category/")) {
+      title += "Kategorie Details";
     } else {
       title += "Seite nicht gefunden";
     }
@@ -60,6 +66,8 @@ function App() {
             <Route path="/" component={Home} />
             <Route path="/conspiracy-theories" component={ConspiracyTheories} />
             <Route path="/topic/:id" component={TopicDetail} />
+            <Route path="/categories" component={Categories} />
+            <Route path="/category/:id" component={CategoryDetail} />
             <Route component={NotFound} />
           </Switch>
         </MainLayout>

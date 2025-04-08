@@ -50,20 +50,29 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ onShowSearchField }) => {
 
   return (
     <div className="fixed top-0 right-0 h-full w-16 bg-white shadow-lg z-40 flex flex-col items-center py-6 border-l border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-      <Link href="/">
-        <a className={`mb-10 transition-colors ${isActive('/') ? 'text-primary-600' : 'text-gray-400 hover:text-primary-600'}`} title="Home">
-          <span className="material-icons text-2xl">home</span>
-        </a>
+      <Link 
+        href="/" 
+        className={`mb-10 transition-colors ${isActive('/') ? 'text-primary-600' : 'text-gray-400 hover:text-primary-600'}`} 
+        title="Home"
+      >
+        <span className="material-icons text-2xl">home</span>
       </Link>
       
-      <Link href="/conspiracy-theories">
-        <a 
-          className={`transition-colors ${isActive('/conspiracy-theories') ? 'text-primary-600' : 'text-gray-400 hover:text-primary-600'}`} 
-          title="Verschwörungstheorien"
-          onClick={handleConspiracyClick}
-        >
-          <span className="material-icons text-2xl">psychology</span>
-        </a>
+      <Link 
+        href="/conspiracy-theories" 
+        className={`transition-colors ${isActive('/conspiracy-theories') ? 'text-primary-600' : 'text-gray-400 hover:text-primary-600'}`} 
+        title="Verschwörungstheorien"
+        onClick={handleConspiracyClick}
+      >
+        <span className="material-icons text-2xl">psychology</span>
+      </Link>
+      
+      <Link 
+        href="/categories" 
+        className={`mt-6 transition-colors ${isActive('/categories') ? 'text-primary-600' : 'text-gray-400 hover:text-primary-600'}`} 
+        title="Verschwörungskategorien"
+      >
+        <span className="material-icons text-2xl">category</span>
       </Link>
       
       <div className="mt-auto flex flex-col items-center space-y-6">
