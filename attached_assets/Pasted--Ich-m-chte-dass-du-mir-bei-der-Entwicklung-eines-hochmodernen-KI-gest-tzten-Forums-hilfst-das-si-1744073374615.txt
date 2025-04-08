@@ -1,0 +1,28 @@
+"Ich möchte, dass du mir bei der Entwicklung eines hochmodernen, KI-gestützten Forums hilfst, das sichස
+
+sich auf Verschwörungstheorien konzentriert. Das Forum soll eine normale Startseite haben, die den Startschuss gibt, erklärt, wie mit KI und mir gearbeitet wird, und betont, dass jedes Thema ausführlich, ehrlich und skeptisch mit echtem menschlichen Verstand angegangen wird. Hier sind die detaillierten Anforderungen:
+
+Technische Integrationen:
+Arbeite mit Daten aus Google Sheets und verbinde sie mit Google Drive zur Speicherung.
+Integriere Google Calendar für Ereignisse oder Zeitpläne.
+Verbinde Dropbox als zusätzlichen Speicher.
+Erstelle eine AI-Chat-Anwendung mit OpenAI, bei der Nutzer beim ersten Beitritt ihren Benutzernamen eingeben.
+Verbinde das Forum mit einer Airtable-Datenbank für strukturiertes Datenmanagement.
+Füge KI-Funktionen hinzu, die OpenAI, Perplexity und Anthropic nutzen (z. B. für Analyse, Zusammenfassung oder Kontextualisierung von Inhalten).
+Implementiere Benutzerauthentifizierung mit Firebase.
+Design und Layout:
+Oben links soll ein Logo platziert werden.
+Ganz rechts eine vertikale Leiste mit den Optionen 'Home' und 'Verschwörungstheorien'.
+Bei Klick auf 'Verschwörungstheorien' bleibt die Fußzeile gleich, aber ein Suchfeld erscheint oben in der Fußzeile. Dieses Suchfeld soll sich mit einer innovativen Animationstechnik (z. B. flüssiges Ausfahren) auf die Hälfte des Bildschirms erweitern. Ein Klick auf die Seite schließt es wieder mit einer ebenso flüssigen Animation.
+Spezielle Suchfeld-Animation: Wenn das Suchfeld vollständig ausgefahren ist (bis zur Hälfte des Bildschirms), erscheinen die Themen mit einem sanften Fade-in-Effekt: Das erste Thema erscheint sofort, das zweite nach 1 Sekunde Verzögerung, und so weiter, bis 6–9 Themen gleichzeitig sichtbar sind. Diese Themen schweben langsam und unabhängig voneinander umher (z. B. mit zufälligen, sanften Bewegungen). Die neuesten erstellten Inhalte (egal welcher Art) werden zuerst angezeigt. Nach einer Minute verblasst jedes Thema langsam (Fade-out), und ein neues Thema erscheint an derselben Stelle mit einem Fade-in-Effekt. Auch wenn ein Thema kurz unsichtbar ist, läuft die Animation im Hintergrund weiter, sodass die Bewegung ununterbrochen wirkt.
+Seitenstruktur:
+Auf der 'Verschwörungstheorien'-Seite werden Themen nach Jahrhunderten geordnet (18. bis 21. Jahrhundert). Jedes Jahrhundert listet akribisch alle relevanten Themen auf, auch die kleinsten und scheinbar unwichtigen, mit Angabe, wann das Thema erstmals erwähnt wurde oder an Relevanz gewann.
+Beim Klick auf ein Jahrhundert öffnet sich eine Liste der Themen dieses Jahrhunderts; ein anderes Jahrhundert schließt sich automatisch, während das neue sich öffnet (Akkordeon-Stil).
+Bei Klick auf ein Thema (z. B. 'Geo-Engineering') öffnet sich eine detaillierte Seite mit allen Informationen dazu. Wörter oder Begriffe auf dieser Seite sollen mit einem Hover-Menü erklärt werden, das bei Mausberührung erscheint und ggf. weitere Unterkategorien ausklappt.
+Technische und gestalterische Anforderungen:
+Nutze die modernste Codiersprache (z. B. React, Next.js, TypeScript) für eine flüssige, performante Umsetzung.
+Implementiere innovative Animationstechniken der Gegenwart und Zukunft (z. B. WebGL, GSAP, Three.js), insbesondere für das schwebende Suchfeld und die Themen-Animationen.
+Stelle sicher, dass alle Elemente (Navigation, Animationen, KI-Features) nahtlos und flüssig miteinander interagieren.
+Füge Funktionen hinzu, die für Foren ungewöhnlich und entscheidend sind, z. B. KI-gestützte Echtheitsprüfung von Beiträgen oder interaktive Zeitlinien.
+Zielsetzung:
+Das Forum soll nicht nur informativ, sondern auch visuell beeindruckend und benutzerfreundlich sein, mit einem Fokus auf Skeptizismus und kritischer Analyse von Verschwörungstheorien.
