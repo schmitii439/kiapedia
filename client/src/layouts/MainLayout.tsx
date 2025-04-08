@@ -37,14 +37,42 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   return (
     <div className="flex min-h-screen relative bg-zinc-900">
       {/* Main content area */}
-      <div className={`flex-1 ${navVisible ? 'pr-20' : 'pr-4'} pl-4 transition-all duration-500`}>
-        {/* Logo - now clickable to toggle navigation */}
-        <div 
-          className={`py-4 px-2 ${isHomePage ? 'absolute top-0 left-0 z-50' : ''}`}
-          onClick={toggleNavigation}
-        >
-          <div className="cursor-pointer">
-            <Logo />
+      <div className="flex-1 px-4 transition-all duration-500">
+        <div className="relative">
+          {/* Logo and Navigation container - logo is clickable to toggle navigation */}
+          <div className={`${isHomePage ? 'absolute top-0 left-0 z-50' : ''}`}>
+            <div 
+              className="py-4 px-2 cursor-pointer"
+              onClick={toggleNavigation}
+            >
+              <Logo />
+            </div>
+            
+            {/* Navigation menu that drops down below logo */}
+            <AnimatePresence>
+              {navVisible && (
+                <motion.div
+                  initial={{ y: -20, opacity: 0, height: 0 }}
+                  animate={{ y: 0, opacity: 1, height: 'auto' }}
+                  exit={{ y: -20, opacity: 0, height: 0 }}
+                  transition={{ 
+                    type: "spring", 
+                    stiffness: 400, 
+                    damping: 30
+                  }}
+                  className="absolute left-0 top-full z-40 w-auto"
+                  style={{
+                    // Visual connection to the logo
+                    marginTop: "-5px",
+                    borderTop: "2px solid rgba(6, 182, 212, 0.3)",
+                  }}
+                >
+                  <div className="py-2">
+                    <NavigationBar onShowSearchField={handleShowSearchField} mode="horizontal" />
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
         
@@ -53,25 +81,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           {children}
         </main>
       </div>
-
-      {/* Animated Vertical navigation bar */}
-      <AnimatePresence>
-        {navVisible && (
-          <motion.div
-            initial={{ x: 100, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: 100, opacity: 0 }}
-            transition={{ 
-              type: "spring", 
-              stiffness: 300, 
-              damping: 30
-            }}
-            className="fixed top-0 right-0 z-40 h-full"
-          >
-            <NavigationBar onShowSearchField={handleShowSearchField} />
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Search field */}
       <SearchField 
