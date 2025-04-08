@@ -151,55 +151,87 @@ const CategoryDetail: React.FC = () => {
         transition={{ duration: 0.5 }}
       >
         <div className="mb-6">
-          <div className="flex flex-col md:flex-row md:items-center gap-4 mb-6">
-            <div className="flex-1">
-              <h1 className="text-3xl font-bold mb-2 text-white">{category.title}</h1>
-              <p className="text-gray-300">{category.description}</p>
-            </div>
+          <motion.div 
+            className="relative rounded-xl overflow-hidden mb-6 border border-cyan-500/20"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8 }}
+          >
             {category.image && (
-              <div className="md:w-1/3 h-40 rounded-lg overflow-hidden border border-cyan-500/20">
+              <div className="absolute inset-0 w-full h-full">
                 <img 
                   src={category.image} 
                   alt={category.title} 
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover opacity-40"
                 />
+                <div className="absolute inset-0 bg-gradient-to-b from-gray-900/40 to-gray-900/90"></div>
               </div>
             )}
-          </div>
+            <div className="relative p-6 z-10">
+              <h1 className="text-3xl md:text-4xl font-bold mb-3 text-white text-shadow-lg">{category.title}</h1>
+              <p className="text-gray-200 max-w-3xl text-shadow-sm">{category.description}</p>
+            </div>
+          </motion.div>
           
           {/* Filter controls */}
-          <div className="flex flex-col md:flex-row gap-4 bg-gray-700/50 p-4 rounded-lg mb-6 backdrop-blur-sm border border-cyan-500/20">
-            <div className="flex-1">
-              <label className="block text-sm text-gray-400 mb-1">Sortieren nach</label>
-              <div className="flex flex-wrap gap-2">
-                <motion.div whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 400 }}>
+          <motion.div 
+            className="bg-gray-700/50 rounded-lg mb-6 backdrop-blur-sm border border-cyan-500/20 overflow-hidden"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            {/* Sort options */}
+            <div className="p-4 border-b border-cyan-500/10">
+              <label className="flex items-center text-sm text-cyan-400 mb-3 font-semibold">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
+                </svg>
+                Sortieren nach
+              </label>
+              <div className="grid grid-cols-3 gap-2 sm:flex sm:flex-wrap">
+                <motion.div 
+                  whileHover={{ scale: 1.05 }} 
+                  whileTap={{ scale: 0.95 }} 
+                  transition={{ type: "spring", stiffness: 400 }}
+                  className="w-full sm:w-auto"
+                >
                   <Button 
                     variant={sortOption === 'year' ? 'default' : 'outline'} 
                     size="sm"
                     onClick={() => setSortOption('year')}
-                    className={sortOption === 'year' ? 'bg-cyan-700 hover:bg-cyan-600' : 'border-cyan-500/30 text-cyan-400 hover:text-cyan-300'}
+                    className={`w-full sm:w-auto ${sortOption === 'year' ? 'bg-cyan-700 hover:bg-cyan-600' : 'border-cyan-500/30 text-cyan-400 hover:text-cyan-300'}`}
                   >
                     Jahr
                   </Button>
                 </motion.div>
                 
-                <motion.div whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 400 }}>
+                <motion.div 
+                  whileHover={{ scale: 1.05 }} 
+                  whileTap={{ scale: 0.95 }} 
+                  transition={{ type: "spring", stiffness: 400 }}
+                  className="w-full sm:w-auto"
+                >
                   <Button 
                     variant={sortOption === 'name' ? 'default' : 'outline'} 
                     size="sm"
                     onClick={() => setSortOption('name')}
-                    className={sortOption === 'name' ? 'bg-cyan-700 hover:bg-cyan-600' : 'border-cyan-500/30 text-cyan-400 hover:text-cyan-300'}
+                    className={`w-full sm:w-auto ${sortOption === 'name' ? 'bg-cyan-700 hover:bg-cyan-600' : 'border-cyan-500/30 text-cyan-400 hover:text-cyan-300'}`}
                   >
                     Name
                   </Button>
                 </motion.div>
                 
-                <motion.div whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 400 }}>
+                <motion.div 
+                  whileHover={{ scale: 1.05 }} 
+                  whileTap={{ scale: 0.95 }} 
+                  transition={{ type: "spring", stiffness: 400 }}
+                  className="w-full sm:w-auto"
+                >
                   <Button 
                     variant={sortOption === 'truth' ? 'default' : 'outline'} 
                     size="sm"
                     onClick={() => setSortOption('truth')}
-                    className={sortOption === 'truth' ? 'bg-cyan-700 hover:bg-cyan-600' : 'border-cyan-500/30 text-cyan-400 hover:text-cyan-300'}
+                    className={`w-full sm:w-auto ${sortOption === 'truth' ? 'bg-cyan-700 hover:bg-cyan-600' : 'border-cyan-500/30 text-cyan-400 hover:text-cyan-300'}`}
                   >
                     Wahrheitsgrad
                   </Button>
@@ -207,114 +239,163 @@ const CategoryDetail: React.FC = () => {
               </div>
             </div>
             
-            <div className="flex-1">
-              <label className="flex items-center text-sm text-gray-400 mb-1">
+            {/* Filter options */}
+            <div className="p-4">
+              <label className="flex items-center text-sm text-cyan-400 mb-3 font-semibold">
                 <motion.div 
                   className="mr-2"
                   initial={{ scale: 1 }}
                   whileHover={{ scale: 1.2, rotate: 15 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
-                  <FiFilter className="text-cyan-400" />
+                  <FiFilter className="h-5 w-5" />
                 </motion.div>
                 Filtern nach Wahrheitsgrad
               </label>
-              <div className="flex flex-wrap gap-2">
-                <motion.div whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 400 }}>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
+                <motion.div 
+                  whileHover={{ scale: 1.05 }} 
+                  whileTap={{ scale: 0.95 }} 
+                  transition={{ type: "spring", stiffness: 400 }}
+                >
                   <Button 
                     variant={filterTruth === 'all' ? 'default' : 'outline'} 
                     size="sm"
                     onClick={() => setFilterTruth('all')}
-                    className={filterTruth === 'all' ? 'bg-cyan-700 hover:bg-cyan-600' : 'border-cyan-500/30 text-cyan-400 hover:text-cyan-300'}
+                    className={`w-full ${filterTruth === 'all' ? 'bg-cyan-700 hover:bg-cyan-600' : 'border-cyan-500/30 text-cyan-400 hover:text-cyan-300'}`}
                   >
                     Alle
                   </Button>
                 </motion.div>
                 
-                <motion.div whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 400 }}>
+                <motion.div 
+                  whileHover={{ scale: 1.05 }} 
+                  whileTap={{ scale: 0.95 }} 
+                  transition={{ type: "spring", stiffness: 400 }}
+                >
                   <Button 
                     variant={filterTruth === 'confirmed' ? 'default' : 'outline'} 
                     size="sm"
                     onClick={() => setFilterTruth('confirmed')}
-                    className={filterTruth === 'confirmed' ? 'bg-green-700 hover:bg-green-600' : 'border-cyan-500/30 text-cyan-400 hover:text-cyan-300'}
+                    className={`w-full ${filterTruth === 'confirmed' ? 'bg-green-700 hover:bg-green-600' : 'border-cyan-500/30 text-cyan-400 hover:text-cyan-300'}`}
                   >
                     Bestätigt
                   </Button>
                 </motion.div>
                 
-                <motion.div whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 400 }}>
+                <motion.div 
+                  whileHover={{ scale: 1.05 }} 
+                  whileTap={{ scale: 0.95 }} 
+                  transition={{ type: "spring", stiffness: 400 }}
+                >
                   <Button 
                     variant={filterTruth === 'controversial' ? 'default' : 'outline'} 
                     size="sm"
                     onClick={() => setFilterTruth('controversial')}
-                    className={filterTruth === 'controversial' ? 'bg-yellow-700 hover:bg-yellow-600' : 'border-cyan-500/30 text-cyan-400 hover:text-cyan-300'}
+                    className={`w-full ${filterTruth === 'controversial' ? 'bg-yellow-700 hover:bg-yellow-600' : 'border-cyan-500/30 text-cyan-400 hover:text-cyan-300'}`}
                   >
                     Umstritten
                   </Button>
                 </motion.div>
                 
-                <motion.div whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 400 }}>
+                <motion.div 
+                  whileHover={{ scale: 1.05 }} 
+                  whileTap={{ scale: 0.95 }} 
+                  transition={{ type: "spring", stiffness: 400 }}
+                >
                   <Button 
                     variant={filterTruth === 'debunked' ? 'default' : 'outline'} 
                     size="sm"
                     onClick={() => setFilterTruth('debunked')}
-                    className={filterTruth === 'debunked' ? 'bg-red-700 hover:bg-red-600' : 'border-cyan-500/30 text-cyan-400 hover:text-cyan-300'}
+                    className={`w-full ${filterTruth === 'debunked' ? 'bg-red-700 hover:bg-red-600' : 'border-cyan-500/30 text-cyan-400 hover:text-cyan-300'}`}
                   >
                     Widerlegt
                   </Button>
                 </motion.div>
                 
-                <motion.div whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 400 }}>
+                <motion.div 
+                  whileHover={{ scale: 1.05 }} 
+                  whileTap={{ scale: 0.95 }} 
+                  transition={{ type: "spring", stiffness: 400 }}
+                >
                   <Button 
                     variant={filterTruth === 'unconfirmed' ? 'default' : 'outline'} 
                     size="sm"
                     onClick={() => setFilterTruth('unconfirmed')}
-                    className={filterTruth === 'unconfirmed' ? 'bg-gray-700 hover:bg-gray-600' : 'border-cyan-500/30 text-cyan-400 hover:text-cyan-300'}
+                    className={`w-full ${filterTruth === 'unconfirmed' ? 'bg-gray-700 hover:bg-gray-600' : 'border-cyan-500/30 text-cyan-400 hover:text-cyan-300'}`}
                   >
-                    <TbExclamationMark className="mr-1" />
-                    Nichts bestätigt
+                    <TbExclamationMark className="mr-1 inline-block" />
+                    <span className="hidden sm:inline">Nichts bestätigt</span>
+                    <span className="sm:hidden">N/A</span>
                   </Button>
                 </motion.div>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
         
         {/* Topics grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {sortedAndFilteredTopics.map(topic => {
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 md:gap-6">
+          {sortedAndFilteredTopics.map((topic, index) => {
             const fireLevel = renderFireLevel(topic.truthRating);
             
             return (
               <motion.div 
                 key={topic.id}
-                className="bg-gray-700/50 rounded-lg p-5 border border-cyan-500/10 hover:border-cyan-500/30 transition-all hover:shadow-md"
-                initial={{ opacity: 0, y: 10 }}
+                className="bg-gray-700/50 rounded-lg overflow-hidden border border-cyan-500/10 hover:border-cyan-500/30 transition-all hover:shadow-lg group"
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+                whileHover={{ 
+                  scale: 1.02,
+                  boxShadow: "0 0 20px rgba(0, 255, 255, 0.2)"
+                }}
               >
-                <div className="flex justify-between items-start mb-3">
-                  <div>
-                    <h2 className="text-xl font-semibold text-white">{topic.title}</h2>
-                    <p className="text-sm text-gray-400">Erste Erwähnung: {topic.year}</p>
+                {/* Card Header */}
+                <div className="p-5">
+                  <div className="flex justify-between items-start mb-3">
+                    <div>
+                      <h2 className="text-xl font-semibold text-white group-hover:text-cyan-300 transition-colors">{topic.title}</h2>
+                      <div className="flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-400 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <p className="text-sm text-gray-400">Erste Erwähnung: {topic.year}</p>
+                      </div>
+                    </div>
+                    <motion.div
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      transition={{ type: "spring", stiffness: 300 }}
+                    >
+                      <Badge variant="outline" className={`${fireLevel.className} text-white flex items-center gap-1 px-3 py-1`}>
+                        <img src={fireLevel.icon} alt="Truth Level" className="w-4 h-4" />
+                        {fireLevel.text}
+                      </Badge>
+                    </motion.div>
                   </div>
-                  <Badge variant="outline" className={`${fireLevel.className} text-white flex items-center gap-1 px-3 py-1`}>
-                    <img src={fireLevel.icon} alt="Truth Level" className="w-4 h-4" />
-                    {fireLevel.text}
-                  </Badge>
+                  
+                  <p className="text-gray-300 mb-4 line-clamp-3">{topic.description}</p>
                 </div>
                 
-                <p className="text-gray-300 mb-4 line-clamp-3">{topic.description}</p>
-                
-                <Link href={`/topic/${topic.id}`}>
-                  <Button 
-                    variant="outline" 
-                    className="w-full mt-2 border-cyan-500/30 text-cyan-400 hover:text-cyan-300 hover:bg-gray-600/50"
-                  >
-                    Details anzeigen
-                  </Button>
-                </Link>
+                {/* Card Footer */}
+                <div className="border-t border-cyan-500/10 p-3 bg-gray-800/50 group-hover:bg-gray-700/80 transition-colors">
+                  <Link href={`/topic/${topic.id}`} className="block">
+                    <motion.div 
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
+                    >
+                      <Button 
+                        variant="outline" 
+                        className="w-full border-cyan-500/30 text-cyan-400 hover:text-cyan-300 hover:bg-gray-600/50 group-hover:border-cyan-400/50"
+                      >
+                        <span className="mr-2">Details anzeigen</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                      </Button>
+                    </motion.div>
+                  </Link>
+                </div>
               </motion.div>
             );
           })}
