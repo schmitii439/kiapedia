@@ -4,6 +4,11 @@ import { motion } from 'framer-motion';
 import CenturyAccordion from '@/components/CenturyAccordion';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Slider } from '@/components/ui/slider';
+import { Label } from '@/components/ui/label';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 
 // Import fire level icons
@@ -29,13 +34,15 @@ const ConspiracyTheories: React.FC = () => {
     
     const counts: Record<number, number> = {};
     
-    topics.forEach(topic => {
-      if (counts[topic.century]) {
-        counts[topic.century]++;
-      } else {
-        counts[topic.century] = 1;
-      }
-    });
+    if (Array.isArray(topics)) {
+      topics.forEach((topic: any) => {
+        if (counts[topic.century]) {
+          counts[topic.century]++;
+        } else {
+          counts[topic.century] = 1;
+        }
+      });
+    }
     
     return counts;
   };
@@ -45,12 +52,32 @@ const ConspiracyTheories: React.FC = () => {
   const { toast } = useToast();
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
 
+  const [showNewTopicModal, setShowNewTopicModal] = useState(false);
+  const [newTopicTitle, setNewTopicTitle] = useState('');
+  const [newTopicDescription, setNewTopicDescription] = useState('');
+  const [newTopicYear, setNewTopicYear] = useState('');
+  const [newTopicCentury, setNewTopicCentury] = useState(21);
+  const [newTopicTruthLevel, setNewTopicTruthLevel] = useState(5);
+  
   const handleNewTopicClick = () => {
+    setShowNewTopicModal(true);
+  };
+  
+  const handleSubmitNewTopic = () => {
+    // In einer echten App würden wir hier die Daten an den Server senden
     toast({
-      title: "Neues Thema erstellen",
-      description: "Diese Funktion wird in der nächsten Version implementiert.",
+      title: "Thema erstellt",
+      description: `'${newTopicTitle}' mit Wahrheitslevel ${newTopicTruthLevel} wurde erfolgreich erstellt.`,
       duration: 3000,
     });
+    
+    // Formular zurücksetzen
+    setNewTopicTitle('');
+    setNewTopicDescription('');
+    setNewTopicYear('');
+    setNewTopicCentury(21);
+    setNewTopicTruthLevel(5);
+    setShowNewTopicModal(false);
   };
 
   const handleUploadClick = () => {
@@ -164,6 +191,128 @@ const ConspiracyTheories: React.FC = () => {
           </div>
         </div>
       </div>
+      
+      {/* Neues Thema Modal */}
+      <Dialog open={showNewTopicModal} onOpenChange={setShowNewTopicModal}>
+        <DialogContent className="sm:max-w-[600px] bg-gradient-to-b from-gray-900 to-gray-800 border border-cyan-500/30 text-white">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold text-white">Neues Thema erstellen</DialogTitle>
+          </DialogHeader>
+          
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="title" className="text-right">
+                Titel
+              </Label>
+              <Input
+                id="title"
+                value={newTopicTitle}
+                onChange={(e) => setNewTopicTitle(e.target.value)}
+                className="col-span-3 bg-gray-800 border-gray-700 text-white"
+              />
+            </div>
+            
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="year" className="text-right">
+                Jahr
+              </Label>
+              <Input
+                id="year"
+                value={newTopicYear}
+                onChange={(e) => setNewTopicYear(e.target.value)}
+                className="col-span-3 bg-gray-800 border-gray-700 text-white"
+                placeholder="z.B. 1969"
+              />
+            </div>
+            
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="century" className="text-right">
+                Jahrhundert
+              </Label>
+              <div className="col-span-3 flex gap-4 items-center">
+                <div className="flex-1 grid grid-cols-4 gap-2">
+                  {[18, 19, 20, 21].map((century) => (
+                    <Button
+                      key={century}
+                      type="button"
+                      onClick={() => setNewTopicCentury(century)}
+                      variant={newTopicCentury === century ? "default" : "outline"}
+                      className={newTopicCentury === century ? "bg-cyan-600 hover:bg-cyan-700" : ""}
+                    >
+                      {century}.
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="truthLevel" className="text-right">
+                Wahrheitslevel (1-10)
+              </Label>
+              <div className="col-span-3 space-y-3">
+                <div className="flex justify-between">
+                  <span>Unwahrscheinlich</span>
+                  <span>Gewiss</span>
+                </div>
+                <div className="flex items-center gap-4">
+                  <img src={fireLvl1} alt="Level 1" className="w-6 h-6" />
+                  <Slider
+                    value={[newTopicTruthLevel]}
+                    min={1}
+                    max={10}
+                    step={1}
+                    onValueChange={(value) => setNewTopicTruthLevel(value[0])}
+                    className="flex-1"
+                  />
+                  <img 
+                    src={
+                      newTopicTruthLevel <= 1 ? fireLvl1 :
+                      newTopicTruthLevel <= 2 ? fireLvl2 :
+                      newTopicTruthLevel <= 3 ? fireLvl3 :
+                      newTopicTruthLevel <= 5 ? fireLvl4 :
+                      newTopicTruthLevel <= 6 ? fireLvl5 :
+                      newTopicTruthLevel <= 7 ? fireLvl6 :
+                      newTopicTruthLevel <= 9 ? fireLvl7 :
+                      fireLvl8
+                    } 
+                    alt={`Level ${newTopicTruthLevel}`} 
+                    className="w-7 h-7" 
+                  />
+                </div>
+                <div className="text-center font-bold text-xl text-cyan-500">
+                  {newTopicTruthLevel}/10
+                </div>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-4 items-start gap-4">
+              <Label htmlFor="description" className="text-right">
+                Beschreibung
+              </Label>
+              <Textarea
+                id="description"
+                value={newTopicDescription}
+                onChange={(e) => setNewTopicDescription(e.target.value)}
+                className="col-span-3 min-h-[120px] bg-gray-800 border-gray-700 text-white"
+              />
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={() => setShowNewTopicModal(false)}>
+              Abbrechen
+            </Button>
+            <Button 
+              type="button" 
+              onClick={handleSubmitNewTopic}
+              className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white border border-cyan-400/30 shadow-md"
+            >
+              Thema erstellen
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
