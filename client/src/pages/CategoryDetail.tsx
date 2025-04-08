@@ -13,7 +13,6 @@ import fireLvl1 from '@assets/fire-level-1.png';
 import fireLvl3 from '@assets/fire-level-3.png';
 import fireLvl5 from '@assets/fire-level-5.png';
 import fireLvl8 from '@assets/fire-level-8.png';
-import chemtrailsImg from '@assets/DALL·E 2025-04-08 05.09.55 - A subtle, realistic photomontage intended as a website background, depicting a high-altitude airplane dispersing visible chemtrails across a partly cl.webp';
 import geoEngineeringImg from '@assets/DALL·E 2025-04-08 05.11.19 - A subtle, realistic photomontage designed for a website background, illustrating the concept of geo-engineering without text. The image features a wid.webp';
 
 // Define verschwörungsKategorien directly in this component

@@ -19,8 +19,7 @@ import backIcon from '@assets/back.png';
 import commentIcon from '@assets/comment.png';
 import docIcon from '@assets/doc.png';
 import categoryIcon from '@assets/category.png';
-import chemtrailsBg from '@assets/DALL·E 2025-04-08 05.09.55 - A subtle, realistic photomontage intended as a website background, depicting a high-altitude airplane dispersing visible chemtrails across a partly cl.webp';
-import geoEngineeringBg from '@assets/DALL·E 2025-04-08 05.11.19 - A subtle, realistic photomontage designed for a website background, illustrating the concept of geo-engineering without text. The image features a wid.webp';
+// Die speziellen Bilder werden nur bei den entsprechenden Themenseiten eingesetzt
 
 const Home: React.FC = () => {
   const { toast } = useToast();
@@ -103,9 +102,8 @@ const Home: React.FC = () => {
       <div 
         className="min-h-screen relative flex flex-col items-center justify-center px-4 sm:px-8"
         style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.85)), url(${chemtrailsBg})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
+          backgroundColor: 'rgb(9, 9, 11)',
+          backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(14, 165, 233, 0.06), rgba(9, 9, 11, 0) 70%)',
         }}
       >
         <motion.div 
@@ -258,9 +256,8 @@ const Home: React.FC = () => {
         id="social-section"
         className="min-h-screen relative flex flex-col items-center justify-center px-4 sm:px-8"
         style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url(${geoEngineeringBg})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
+          backgroundColor: '#0f172a',
+          backgroundImage: 'radial-gradient(circle at 25% 25%, rgba(56, 189, 248, 0.05), rgba(15, 23, 42, 0) 40%), radial-gradient(circle at 75% 75%, rgba(124, 58, 237, 0.05), rgba(15, 23, 42, 0) 40%)',
         }}
       >
         <motion.div 

@@ -17,8 +17,7 @@ import fireLvl8 from '@assets/fire-level-8.png';
 import categoryIcon from '@assets/category.png';
 import infoIcon from '@assets/info.png';
 
-// Import the Chemtrails image
-import chemtrailsImg from '@assets/DALL·E 2025-04-08 05.09.55 - A subtle, realistic photomontage intended as a website background, depicting a high-altitude airplane dispersing visible chemtrails across a partly cl.webp';
+// Import the Geo-Engineering image (Chemtrails image wird nur bei der Themenseite verwendet)
 import geoEngineeringImg from '@assets/DALL·E 2025-04-08 05.11.19 - A subtle, realistic photomontage designed for a website background, illustrating the concept of geo-engineering without text. The image features a wid.webp';
 
 // Define categories with example topics

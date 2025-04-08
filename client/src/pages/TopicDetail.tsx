@@ -20,6 +20,10 @@ import commentIcon from '@assets/comment.png';
 import backIcon from '@assets/back.png';
 import downloadIcon from '@assets/download.png';
 
+// Import theme-specific background images (nur für bestimmte Themen)
+import chemtrailsImg from '@assets/DALL·E 2025-04-08 05.09.55 - A subtle, realistic photomontage intended as a website background, depicting a high-altitude airplane dispersing visible chemtrails across a partly cl.webp';
+import geoEngineeringImg from '@assets/DALL·E 2025-04-08 05.11.19 - A subtle, realistic photomontage designed for a website background, illustrating the concept of geo-engineering without text. The image features a wid.webp';
+
 const TopicDetail: React.FC = () => {
   const [match, params] = useRoute<{ id: string }>('/topic/:id');
   const { toast } = useToast();
@@ -148,7 +152,20 @@ const TopicDetail: React.FC = () => {
     return "unwahr";
   };
 
+  // Get topic-specific background image based on topic ID
+  const getTopicImage = (id: number) => {
+    // Chemtrails topic (ID: 101) uses the Chemtrails image
+    if (id === 101) return chemtrailsImg;
+    
+    // All Geo-Engineering topics (IDs: 101-103) use the Geo-Engineering image
+    if (id >= 101 && id <= 103) return geoEngineeringImg;
+    
+    // Default: no specific image
+    return null;
+  };
+
   const truthStatus = topic ? getTruthStatus(topic.id) : "unbestätigt";
+  const topicImage = topic ? getTopicImage(topic.id) : null;
 
   // Handle file upload
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -200,6 +217,11 @@ const TopicDetail: React.FC = () => {
       
       <motion.div 
         className="bg-gray-800/70 rounded-xl border border-cyan-500/20 p-6 mb-8 shadow-lg backdrop-blur-sm"
+        style={{
+          backgroundImage: topicImage ? `linear-gradient(to bottom, rgba(31, 41, 55, 0.8), rgba(17, 24, 39, 0.95)), url(${topicImage})` : undefined,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -253,10 +275,10 @@ const TopicDetail: React.FC = () => {
         
         {/* Main content section with topic description */}
         {topicContent ? (
-          <div className="text-gray-300 mb-8 leading-relaxed">
-            {/* Using styled div instead of dangerouslySetInnerHTML for better security */}
-            <div className="prose prose-invert max-w-none mb-8">
-              <p>{topicContent.content || "Keine Beschreibung verfügbar."}</p>
+          <div className="text-gray-300 mb-8 leading-relaxed group">
+            {/* Hover to reveal more detailed content */}
+            <div className="prose prose-invert max-w-none mb-8 transition-all duration-300 ease-in-out">
+              <p className="group-hover:opacity-100">{topicContent.content || "Keine Beschreibung verfügbar."}</p>
             </div>
           </div>
         ) : (
