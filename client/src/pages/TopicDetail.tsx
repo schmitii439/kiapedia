@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Topic, TopicContent, ExpertOpinion } from '@shared/schema';
 import HoverDefinition from '@/components/HoverDefinition';
 import AIChat from '@/components/AIChat';
+import ReactionButtons from '@/components/ReactionButtons';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -110,8 +111,8 @@ const TopicDetail: React.FC = () => {
           <span className="material-icons text-4xl text-gray-400 mb-4">error_outline</span>
           <h1 className="text-2xl font-semibold mb-2">Thema nicht gefunden</h1>
           <p className="text-gray-600 mb-6 dark:text-gray-300">Das von Ihnen gesuchte Thema existiert nicht oder wurde gelöscht.</p>
-          <Link href="/conspiracy-theories">
-            <a className="text-primary-600 hover:underline font-medium">Zurück zur Übersicht</a>
+          <Link href="/conspiracy-theories" className="text-primary-600 hover:underline font-medium">
+            Zurück zur Übersicht
           </Link>
         </div>
       </div>
@@ -187,11 +188,9 @@ const TopicDetail: React.FC = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
       >
-        <Link href="/conspiracy-theories">
-          <a className="text-cyan-400 hover:text-cyan-300 flex items-center transition-colors">
-            <img src={backIcon} alt="Back" className="w-4 h-4 mr-1" />
-            Zurück zur Übersicht
-          </a>
+        <Link href="/conspiracy-theories" className="text-cyan-400 hover:text-cyan-300 flex items-center transition-colors">
+          <img src={backIcon} alt="Back" className="w-4 h-4 mr-1" />
+          Zurück zur Übersicht
         </Link>
         <span className="mx-2 text-gray-400">/</span>
         <span className="text-gray-300">{topic.century}. Jahrhundert</span>
@@ -391,18 +390,19 @@ const TopicDetail: React.FC = () => {
             <h3 className="text-lg font-semibold mb-4">Verwandte Theorien</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {relatedTopics.map(relatedTopic => (
-                <Link key={relatedTopic.id} href={`/topic/${relatedTopic.id}`}>
-                  <a className="bg-gray-50 p-3 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors dark:bg-gray-700 dark:hover:bg-gray-600">
-                    <h4 className="font-medium">{relatedTopic.title}</h4>
-                    {relatedTopic.shortDescription && (
-                      <p className="text-sm text-gray-600 dark:text-gray-400">{relatedTopic.shortDescription}</p>
-                    )}
-                  </a>
+                <Link key={relatedTopic.id} href={`/topic/${relatedTopic.id}`} className="bg-gray-50 p-3 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors dark:bg-gray-700 dark:hover:bg-gray-600 block">
+                  <h4 className="font-medium">{relatedTopic.title}</h4>
+                  {relatedTopic.shortDescription && (
+                    <p className="text-sm text-gray-600 dark:text-gray-400">{relatedTopic.shortDescription}</p>
+                  )}
                 </Link>
               ))}
             </div>
           </div>
         )}
+        
+        {/* Reaction Buttons */}
+        <ReactionButtons postId={topicId || 0} className="mt-6" />
       </motion.div>
       
       {/* AI Chat Module */}
