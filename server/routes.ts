@@ -11,6 +11,7 @@ import {
   insertAiChatSchema,
   insertExpertOpinionSchema
 } from "@shared/schema";
+import OpenAI from "openai";
 
 // Helper function to handle async routes
 const asyncHandler = (fn: (req: Request, res: Response) => Promise<void>) => 
@@ -20,6 +21,11 @@ const asyncHandler = (fn: (req: Request, res: Response) => Promise<void>) =>
       res.status(500).json({ message: err.message || "Internal server error" });
     });
   };
+
+// Initialize OpenAI API client
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // API routes for users
@@ -201,6 +207,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: error.errors });
       }
       throw error;
+    }
+  }));
+  
+  // API route for OpenAI chat completions
+  app.post('/api/openai/chat', asyncHandler(async (req, res) => {
+    try {
+      const { messages, systemMessage } = req.body;
+      
+      if (!messages || !Array.isArray(messages)) {
+        return res.status(400).json({ message: "Messages are required and must be an array" });
+      }
+      
+      // Prepare messages array for OpenAI
+      const openaiMessages = [];
+      
+      // Add system message if provided
+      if (systemMessage) {
+        openaiMessages.push({ role: 'system', content: systemMessage });
+      }
+      
+      // Add user and assistant messages
+      openaiMessages.push(...messages);
+      
+      // Call OpenAI API
+      const completion = await openai.chat.completions.create({
+        model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024
+        messages: openaiMessages,
+        temperature: 0.7,
+        max_tokens: 1000
+      });
+      
+      res.json({
+        content: completion.choices[0].message.content,
+        model: completion.model
+      });
+    } catch (error) {
+      console.error("OpenAI API error:", error);
+      res.status(500).json({ 
+        message: "Error calling OpenAI API", 
+        error: error instanceof Error ? error.message : String(error)
+      });
     }
   }));
 

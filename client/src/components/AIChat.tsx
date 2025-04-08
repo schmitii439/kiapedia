@@ -34,60 +34,61 @@ const AIChat: React.FC<AIChatProps> = ({ topicId, initialAnalysis }) => {
     if (!question.trim()) return;
     
     try {
-      // For demonstration without API keys
-      toast({
-        title: "KI-Anfrage",
-        description: `Die ${selectedProvider.toUpperCase()}-API würde hier verwendet werden, wenn der API-Schlüssel konfiguriert wäre.`,
-        duration: 3000,
-      });
-      
       // Add the question to the UI immediately for better UX
       if (selectedProvider === 'openai') {
-        openai.addMessage({ role: 'user', content: question });
-        openai.addMessage({ role: 'assistant', content: 'Diese Antwort ist ein Platzhalter. Um echte KI-Antworten zu erhalten, muss ein OpenAI API-Schlüssel konfiguriert werden.' });
+        try {
+          const response = await openai.generateResponse(question);
+          
+          // Save chat to backend if user is logged in and topicId is provided
+          if (topicId) {
+            try {
+              await apiRequest('POST', '/api/ai-chats', {
+                userId: 1, // This would be the actual user ID when authentication is implemented
+                topicId,
+                question,
+                answer: response,
+                aiProvider: selectedProvider
+              });
+              
+              // Invalidate AI chats query to refresh the data
+              queryClient.invalidateQueries({ queryKey: [`/api/ai-chats/topic/${topicId}`] });
+            } catch (error) {
+              console.error('Failed to save chat:', error);
+            }
+          }
+        } catch (error) {
+          // If API call fails, show error and use placeholder
+          console.error('OpenAI API error:', error);
+          toast({
+            title: "OpenAI-Fehler",
+            description: "Es gab ein Problem bei der Anfrage an die OpenAI API.",
+            variant: "destructive",
+            duration: 3000,
+          });
+          
+          // Add the question and a fallback response for better UX
+          openai.addMessage({ role: 'user', content: question });
+          openai.addMessage({ role: 'assistant', content: 'Es ist ein Fehler bei der Verbindung mit der OpenAI API aufgetreten. Bitte versuchen Sie es später noch einmal.' });
+        }
       } else if (selectedProvider === 'anthropic') {
+        // For Anthropic, we'll use placeholder until API key is provided
+        toast({
+          title: "Anthropic API",
+          description: "Anthropic API-Schlüssel ist nicht konfiguriert. Eine Platzhalterantwort wird angezeigt.",
+          duration: 3000,
+        });
         anthropic.addMessage({ role: 'user', content: question });
         anthropic.addMessage({ role: 'assistant', content: 'Diese Antwort ist ein Platzhalter. Um echte KI-Antworten zu erhalten, muss ein Anthropic API-Schlüssel konfiguriert werden.' });
       } else if (selectedProvider === 'perplexity') {
+        // For Perplexity, we'll use placeholder until API key is provided
+        toast({
+          title: "Perplexity API",
+          description: "Perplexity API-Schlüssel ist nicht konfiguriert. Eine Platzhalterantwort wird angezeigt.",
+          duration: 3000,
+        });
         perplexity.addMessage({ role: 'user', content: question });
         perplexity.addMessage({ role: 'assistant', content: 'Diese Antwort ist ein Platzhalter. Um echte KI-Antworten zu erhalten, muss ein Perplexity API-Schlüssel konfiguriert werden.' });
       }
-      
-      /* Uncomment this when API keys are provided
-      // Select the appropriate AI provider
-      let response: string;
-      
-      switch (selectedProvider) {
-        case 'anthropic':
-          response = await anthropic.generateResponse(question);
-          break;
-        case 'perplexity':
-          response = await perplexity.generateResponse(question);
-          break;
-        case 'openai':
-        default:
-          response = await openai.generateResponse(question);
-          break;
-      }
-      
-      // Save chat to backend if user is logged in and topicId is provided
-      if (topicId) {
-        try {
-          await apiRequest('POST', '/api/ai-chats', {
-            userId: 1, // This would be the actual user ID when authentication is implemented
-            topicId,
-            question,
-            answer: response,
-            aiProvider: selectedProvider
-          });
-          
-          // Invalidate AI chats query to refresh the data
-          queryClient.invalidateQueries({ queryKey: [`/api/ai-chats/topic/${topicId}`] });
-        } catch (error) {
-          console.error('Failed to save chat:', error);
-        }
-      }
-      */
       
       // Clear the input
       setQuestion('');

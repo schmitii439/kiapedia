@@ -57,35 +57,25 @@ export function useOpenAI({ initialPrompt, systemMessage }: UseOpenAIProps = {})
     ];
 
     try {
-      const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
-      
-      if (!apiKey) {
-        throw new Error("OpenAI API key not found");
-      }
-
-      const requestBody: OpenAIRequest = {
-        model: OPENAI_MODEL,
-        messages: updatedMessages,
-        temperature: 0.7,
-        max_tokens: 1000,
-      };
-
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      // Use server-side API endpoint instead of direct API call
+      const response = await fetch('/api/openai/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`
         },
-        body: JSON.stringify(requestBody)
+        body: JSON.stringify({
+          messages: updatedMessages,
+          systemMessage: systemMessage
+        })
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error?.message || 'Failed to get response from OpenAI');
+        throw new Error(errorData.error || 'Failed to get response from OpenAI API');
       }
 
-      const data: OpenAIResponse = await response.json();
-      const result = data.choices[0].message.content;
+      const data = await response.json();
+      const result = data.content;
 
       // Update messages with the bot's response
       setMessages([
