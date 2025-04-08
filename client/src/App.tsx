@@ -41,15 +41,13 @@ function App() {
 
   useEffect(() => {
     // Set page title based on current route
-    let title = "VeriForum - ";
+    let title = "KIAPEDIA - ";
     if (location === "/") {
-      title += "KI-gestütztes Forum für Verschwörungstheorien";
-    } else if (location.startsWith("/conspiracy-theories")) {
-      title += "Verschwörungstheorien im Kontext";
+      title += "Startseite";
     } else if (location.startsWith("/topic/")) {
       title += "Theorie Details";
     } else if (location.startsWith("/categories")) {
-      title += "Verschwörungskategorien";
+      title += "Verschwörungen";
     } else if (location.startsWith("/category/")) {
       title += "Kategorie Details";
     } else {
@@ -64,7 +62,6 @@ function App() {
         <MainLayout>
           <Switch>
             <Route path="/" component={Home} />
-            <Route path="/conspiracy-theories" component={ConspiracyTheories} />
             <Route path="/topic/:id" component={TopicDetail} />
             <Route path="/categories" component={Categories} />
             <Route path="/category/:id" component={CategoryDetail} />

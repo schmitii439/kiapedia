@@ -109,7 +109,7 @@ const Categories: React.FC = () => {
         transition={{ duration: 0.6 }}
       >
         <div className="flex items-center justify-between mb-4">
-          <h1 className="text-3xl font-bold text-white">Verschwörungskategorien</h1>
+          <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-400">Verschwörungen</h1>
           <Button 
             onClick={handleNewCategoryClick}
             className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white border border-cyan-400/30 shadow-md"
@@ -119,7 +119,7 @@ const Categories: React.FC = () => {
           </Button>
         </div>
         <p className="text-gray-300 mb-6">
-          Hier findest du eine Übersicht aller Verschwörungskategorien in unserer Datenbank, jede mit ihren zugehörigen Theorien.
+          Hier findest du alle verfügbaren Verschwörungstheorien, sorgfältig nach Kategorien geordnet und mit KI-gestützten Analysen versehen.
         </p>
         
         {/* Info Box */}

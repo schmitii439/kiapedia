@@ -21,7 +21,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   };
 
   return (
-    <div className="flex min-h-screen relative">
+    <div className="flex min-h-screen relative bg-zinc-900">
       {/* Main content area */}
       <div className="flex-1 pl-4 pr-20">
         {/* Logo */}

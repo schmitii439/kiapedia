@@ -22,12 +22,10 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ onShowSearchField }) => {
     return location === path;
   };
 
-  // Handle click on conspiracy theories link
-  const handleConspiracyClick = (e: React.MouseEvent) => {
-    if (isActive('/conspiracy-theories')) {
-      e.preventDefault();
-      onShowSearchField();
-    }
+  // Handle click on search
+  const handleSearchClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    onShowSearchField();
   };
 
   // Auth placeholder for demo
@@ -49,28 +47,27 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ onShowSearchField }) => {
   }, []);
 
   return (
-    <div className="fixed top-0 right-0 h-full w-16 bg-white shadow-lg z-40 flex flex-col items-center py-6 border-l border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+    <div className="fixed top-0 right-0 h-full w-16 bg-zinc-900/95 shadow-lg z-40 flex flex-col items-center py-6 border-l border-gray-800">
       <Link 
         href="/" 
-        className={`mb-10 transition-colors ${isActive('/') ? 'text-primary-600' : 'text-gray-400 hover:text-primary-600'}`} 
-        title="Home"
+        className={`mb-10 transition-colors ${isActive('/') ? 'text-cyan-500' : 'text-gray-400 hover:text-cyan-500'}`} 
+        title="Startseite"
       >
         <span className="material-icons text-2xl">home</span>
       </Link>
       
-      <Link 
-        href="/conspiracy-theories" 
-        className={`transition-colors ${isActive('/conspiracy-theories') ? 'text-primary-600' : 'text-gray-400 hover:text-primary-600'}`} 
-        title="Verschwörungstheorien"
-        onClick={handleConspiracyClick}
+      <button 
+        onClick={handleSearchClick}
+        className="text-gray-400 hover:text-cyan-500 transition-colors" 
+        title="Suchen"
       >
-        <span className="material-icons text-2xl">psychology</span>
-      </Link>
+        <span className="material-icons text-2xl">search</span>
+      </button>
       
       <Link 
         href="/categories" 
-        className={`mt-6 transition-colors ${isActive('/categories') ? 'text-primary-600' : 'text-gray-400 hover:text-primary-600'}`} 
-        title="Verschwörungskategorien"
+        className={`mt-6 transition-colors ${isActive('/categories') ? 'text-cyan-500' : 'text-gray-400 hover:text-cyan-500'}`} 
+        title="Verschwörungen"
       >
         <span className="material-icons text-2xl">category</span>
       </Link>
@@ -78,7 +75,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ onShowSearchField }) => {
       <div className="mt-auto flex flex-col items-center space-y-6">
         <button 
           onClick={handleAuthClick}
-          className="text-gray-400 hover:text-primary-600 transition-colors" 
+          className="text-gray-400 hover:text-cyan-500 transition-colors" 
           title="Login"
         >
           <span className="material-icons text-2xl">person</span>
@@ -86,8 +83,8 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ onShowSearchField }) => {
         
         <button 
           onClick={toggleDarkMode}
-          className="text-gray-400 hover:text-primary-600 transition-colors" 
-          title="Dark Mode Toggle"
+          className="text-gray-400 hover:text-cyan-500 transition-colors" 
+          title="Dark/Light Modus"
         >
           {darkMode ? (
             <span className="material-icons text-2xl">light_mode</span>
