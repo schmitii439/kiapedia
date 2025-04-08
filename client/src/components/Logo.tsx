@@ -3,9 +3,14 @@ import { useLocation } from 'wouter';
 import kiapediaLogo from '@assets/kiapedia-logo.png';
 import { motion } from 'framer-motion';
 
-const Logo: React.FC = () => {
+interface LogoProps {
+  showSlogan?: boolean;
+}
+
+const Logo: React.FC<LogoProps> = ({ showSlogan = false }) => {
   const [location] = useLocation();
   const isHomePage = location === '/';
+  const isCategoryPage = location.startsWith('/categories') || location.startsWith('/category/');
 
   return (
     <div className="flex items-center group">
@@ -27,31 +32,47 @@ const Logo: React.FC = () => {
       </motion.div>
       
       <div className="flex flex-col relative">
-        <h1 className={`text-3xl font-bold ${isHomePage ? 'text-white' : 'text-black'} tracking-wide z-10`}>
+        <h1 className="text-3xl font-bold text-white tracking-wide z-10">
           KIAPEDIA
         </h1>
         
-        {/* Tooltip-like element that shows on hover */}
-        <motion.p 
-          className={`text-xs italic ${isHomePage ? 'text-cyan-300' : 'text-gray-400'} absolute -mt-1`}
-          initial={{ opacity: 0, y: -5 }}
-          whileHover={{ opacity: 1, y: 15 }}
-          transition={{ duration: 0.2 }}
-        >
-          ... ich hab mies recherchiert!
-        </motion.p>
+        {/* Persistent slogan that shows when showSlogan is true */}
+        {showSlogan && (
+          <motion.p 
+            className="text-xs italic text-cyan-300 mt-1"
+            initial={{ opacity: 0, y: -5 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            ... ich habe mies recherchiert!
+          </motion.p>
+        )}
         
-        {/* Menu indicator */}
-        <motion.div 
-          className="absolute bottom-0 -right-5 mt-1 text-cyan-400 text-xs flex items-center opacity-0 group-hover:opacity-100 transition-opacity"
-          animate={{ x: [0, 3, 0] }}
-          transition={{ repeat: Infinity, duration: 1.5 }}
-        >
-          <span>Menü</span>
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" />
-          </svg>
-        </motion.div>
+        {/* Tooltip-like element that shows on hover when not showing slogan persistently */}
+        {!showSlogan && (
+          <motion.p 
+            className="text-xs italic text-cyan-300 absolute -mt-1"
+            initial={{ opacity: 0, y: -5 }}
+            whileHover={{ opacity: 1, y: 15 }}
+            transition={{ duration: 0.2 }}
+          >
+            ... ich hab mies recherchiert!
+          </motion.p>
+        )}
+        
+        {/* Menu indicator - only on home page */}
+        {isHomePage && (
+          <motion.div 
+            className="absolute bottom-0 -right-5 mt-1 text-cyan-400 text-xs flex items-center opacity-0 group-hover:opacity-100 transition-opacity"
+            animate={{ x: [0, 3, 0] }}
+            transition={{ repeat: Infinity, duration: 1.5 }}
+          >
+            <span>Menü</span>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" />
+            </svg>
+          </motion.div>
+        )}
       </div>
       
       {/* Animated glow effect behind the logo */}

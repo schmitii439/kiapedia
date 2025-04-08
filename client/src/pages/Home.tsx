@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { motion, AnimatePresence } from 'framer-motion';
-import backgroundImage from '@assets/DALL·E 2025-04-08 05.11.19 - A subtle, realistic photomontage designed for a website background, illustrating the concept of geo-engineering without text. The image features a wid.webp';
 
 const Home: React.FC = () => {
   const { toast } = useToast();
@@ -14,18 +13,35 @@ const Home: React.FC = () => {
 
   return (
     <div className="min-h-screen w-full overflow-hidden relative">
-      {/* Full-screen background with overlay */}
-      <div 
-        className="fixed inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ 
-          backgroundImage: `url(${backgroundImage})`,
-        }}
-      />
+      {/* Pure black background */}
+      <div className="fixed inset-0 bg-black z-0" />
       
-      {/* Dark gradient overlay */}
-      <div 
-        className="fixed inset-0 bg-gradient-to-b from-black/60 via-black/70 to-black/80 z-0"
-      />
+      {/* Ambient color glow effects */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        {/* Cyan glow */}
+        <div 
+          className="absolute top-[20%] right-[25%] w-[40vh] h-[40vh] rounded-full bg-cyan-500/5 blur-[100px]"
+          style={{
+            animation: "pulse 15s ease-in-out infinite alternate"
+          }}
+        />
+        
+        {/* Violet glow */}
+        <div
+          className="absolute bottom-[20%] left-[15%] w-[35vh] h-[35vh] rounded-full bg-indigo-500/5 blur-[120px]" 
+          style={{
+            animation: "pulse 18s ease-in-out 2s infinite alternate"
+          }}
+        />
+        
+        {/* Blue subtle glow */}
+        <div
+          className="absolute top-[30%] left-[30%] w-[45vh] h-[30vh] rounded-full bg-blue-500/3 blur-[150px]" 
+          style={{
+            animation: "pulse 20s ease-in-out 1s infinite alternate"
+          }}
+        />
+      </div>
       
       {/* Content layer */}
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 sm:px-8">
@@ -193,6 +209,22 @@ const Home: React.FC = () => {
           </motion.div>
         </div>
       </div>
+
+      {/* CSS Animation Keyframes */}
+      <style dangerouslySetInnerHTML={{
+        __html: `
+        @keyframes pulse {
+          0% {
+            opacity: 0.3;
+            transform: scale(0.9);
+          }
+          100% {
+            opacity: 0.5;
+            transform: scale(1.1);
+          }
+        }
+        `
+      }} />
     </div>
   );
 };
