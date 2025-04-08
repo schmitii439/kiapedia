@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useOpenAI } from '@/lib/openai';
@@ -7,6 +8,11 @@ import { usePerplexity } from '@/lib/perplexity';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
 import { queryClient } from '@/lib/queryClient';
+
+// Import Icons
+import fireLvl1 from '@assets/fire-level-1.png';
+import fireLvl3 from '@assets/fire-level-3.png';
+import fireLvl8 from '@assets/fire-level-8.png';
 
 interface AIChatProps {
   topicId?: number;
@@ -131,56 +137,77 @@ const AIChat: React.FC<AIChatProps> = ({ topicId, initialAnalysis }) => {
   const { messages, isLoading, error } = getActiveState();
 
   return (
-    <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6 dark:bg-gray-800 dark:border-gray-700">
-      <h2 className="text-xl font-semibold mb-4 flex items-center">
-        <span className="material-icons text-primary-600 mr-2">smart_toy</span>
+    <motion.div 
+      className="bg-gray-800/70 rounded-xl border border-cyan-500/20 p-6 backdrop-blur-sm shadow-lg"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.2 }}
+    >
+      <h2 className="text-xl font-semibold mb-4 flex items-center text-white">
+        <img src={fireLvl3} alt="AI" className="w-5 h-5 mr-2" />
         KI-gestützte Analyse
       </h2>
       
       {/* Initial analysis if provided */}
       {initialAnalysis && (
-        <div className="border border-gray-200 rounded-lg p-4 mb-4 dark:border-gray-700">
-          <div className="flex items-start mb-4">
-            <div className="bg-primary-100 p-3 rounded-full mr-3 dark:bg-primary-900">
-              <span className="material-icons text-primary-700 dark:text-primary-300">psychology</span>
+        <motion.div 
+          className="border border-cyan-500/20 rounded-lg p-4 mb-6 bg-gray-700/50"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.3 }}
+        >
+          <div className="flex items-start">
+            <div className="bg-cyan-900/50 p-3 rounded-full mr-3 border border-cyan-500/30">
+              <img src={fireLvl8} alt="AI Analysis" className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-gray-800 dark:text-gray-200">{initialAnalysis}</p>
-              <div className="text-xs text-gray-500 mt-2">Analysiert mit OpenAI GPT-4</div>
+              <p className="text-gray-200">{initialAnalysis}</p>
+              <div className="text-xs text-cyan-400 mt-2">Analysiert mit OpenAI GPT-4</div>
             </div>
           </div>
-        </div>
+        </motion.div>
       )}
 
       {/* Chat messages */}
       <div className="space-y-4 mb-4 max-h-96 overflow-y-auto">
         {messages.filter(msg => msg.role !== 'system').map((message, index) => (
-          <div 
+          <motion.div 
             key={index}
             className={`p-3 rounded-lg ${
               message.role === 'user' 
-                ? 'bg-gray-100 ml-8 dark:bg-gray-700' 
-                : 'bg-primary-50 mr-8 dark:bg-primary-900/30'
+                ? 'bg-gray-700/70 ml-8 border border-cyan-500/20' 
+                : 'bg-gray-800/70 mr-8 border border-cyan-500/30'
             }`}
+            initial={{ opacity: 0, x: message.role === 'user' ? 20 : -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3 }}
           >
             <div className="flex items-start">
               <div className={`p-2 rounded-full mr-2 ${
                 message.role === 'user'
-                  ? 'bg-gray-200 dark:bg-gray-600'
-                  : 'bg-primary-100 dark:bg-primary-800'
+                  ? 'bg-gray-600 border border-cyan-500/20'
+                  : 'bg-cyan-900/50 border border-cyan-500/30'
               }`}>
-                <span className="material-icons text-sm">
-                  {message.role === 'user' ? 'person' : 'smart_toy'}
-                </span>
+                <img 
+                  src={message.role === 'user' ? fireLvl1 : fireLvl8}
+                  alt={message.role === 'user' ? 'User' : 'AI'} 
+                  className="w-4 h-4"
+                />
               </div>
-              <p className="text-sm">{message.content}</p>
+              <p className="text-sm text-gray-200">{message.content}</p>
             </div>
-          </div>
+          </motion.div>
         ))}
 
         {isLoading && (
           <div className="flex justify-center p-4">
-            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary-600"></div>
+            <motion.div 
+              className="relative w-8 h-8"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+            >
+              <img src={fireLvl3} alt="Loading" className="w-full h-full" />
+            </motion.div>
           </div>
         )}
 
@@ -193,58 +220,67 @@ const AIChat: React.FC<AIChatProps> = ({ topicId, initialAnalysis }) => {
 
       {/* AI provider selector */}
       <div className="flex mb-4 space-x-2">
-        <button
+        <motion.button
           onClick={() => setSelectedProvider('openai')}
-          className={`text-xs px-3 py-1 rounded-full ${
+          className={`text-xs px-3 py-1 rounded-full flex items-center gap-1 ${
             selectedProvider === 'openai'
-              ? 'bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300'
-              : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300'
+              ? 'bg-cyan-900/50 text-cyan-400 border border-cyan-500/30'
+              : 'bg-gray-700/50 text-gray-300 border border-gray-600/30'
           }`}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
         >
+          <img src={fireLvl8} alt="OpenAI" className="w-3 h-3" />
           OpenAI
-        </button>
-        <button
+        </motion.button>
+        <motion.button
           onClick={() => setSelectedProvider('anthropic')}
-          className={`text-xs px-3 py-1 rounded-full ${
+          className={`text-xs px-3 py-1 rounded-full flex items-center gap-1 ${
             selectedProvider === 'anthropic'
-              ? 'bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300'
-              : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300'
+              ? 'bg-cyan-900/50 text-cyan-400 border border-cyan-500/30'
+              : 'bg-gray-700/50 text-gray-300 border border-gray-600/30'
           }`}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
         >
+          <img src={fireLvl3} alt="Anthropic" className="w-3 h-3" />
           Anthropic
-        </button>
-        <button
+        </motion.button>
+        <motion.button
           onClick={() => setSelectedProvider('perplexity')}
-          className={`text-xs px-3 py-1 rounded-full ${
+          className={`text-xs px-3 py-1 rounded-full flex items-center gap-1 ${
             selectedProvider === 'perplexity'
-              ? 'bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300'
-              : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300'
+              ? 'bg-cyan-900/50 text-cyan-400 border border-cyan-500/30'
+              : 'bg-gray-700/50 text-gray-300 border border-gray-600/30'
           }`}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
         >
+          <img src={fireLvl1} alt="Perplexity" className="w-3 h-3" />
           Perplexity
-        </button>
+        </motion.button>
       </div>
 
       {/* Input form */}
-      <form onSubmit={handleSubmit} className="flex">
+      <form onSubmit={handleSubmit} className="flex mt-4">
         <Input
           type="text"
           placeholder="Stellen Sie eine Frage zu diesem Thema..."
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
-          className="flex-1 border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+          className="flex-1 bg-gray-700/50 border-cyan-500/20 text-white rounded-l-lg focus:outline-none focus:ring-1 focus:ring-cyan-500"
           disabled={isLoading}
         />
         <Button 
           type="submit"
-          className="bg-primary-600 text-white px-4 py-2 rounded-r-lg hover:bg-primary-700 transition-colors flex items-center"
+          className="bg-cyan-900/60 hover:bg-cyan-800/60 text-white border border-cyan-500/30 px-4 py-2 rounded-r-lg transition-colors flex items-center"
           disabled={isLoading || !question.trim()}
         >
-          <span className="material-icons mr-1 text-sm">send</span>
+          <img src={fireLvl3} alt="Send" className="w-4 h-4 mr-2" />
           Senden
         </Button>
       </form>
-    </div>
+    </motion.div>
   );
 };
 

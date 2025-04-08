@@ -1,7 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { motion } from 'framer-motion';
 import CenturyAccordion from '@/components/CenturyAccordion';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
+
+// Import fire level icons
+import fireLvl1 from '@assets/fire-level-1.png';
+import fireLvl2 from '@assets/fire-level-2.png';
+import fireLvl3 from '@assets/fire-level-3.png';
+import fireLvl4 from '@assets/fire-level-4.png';
+import fireLvl5 from '@assets/fire-level-5.png';
+import fireLvl6 from '@assets/fire-level-6.png';
+import fireLvl7 from '@assets/fire-level-7.png';
+import fireLvl8 from '@assets/fire-level-8.png';
+import categoryIcon from '@assets/category.png';
 
 const ConspiracyTheories: React.FC = () => {
   // Fetch all topics for initial statistics
@@ -28,14 +42,57 @@ const ConspiracyTheories: React.FC = () => {
 
   const topicCounts = getTopicsCountByCentury();
 
+  const { toast } = useToast();
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+
+  const handleNewTopicClick = () => {
+    toast({
+      title: "Neues Thema erstellen",
+      description: "Diese Funktion wird in der nächsten Version implementiert.",
+      duration: 3000,
+    });
+  };
+
+  const handleUploadClick = () => {
+    setIsUploadModalOpen(true);
+    toast({
+      title: "Datei-Upload",
+      description: "Diese Funktion wird in der nächsten Version implementiert.",
+      duration: 3000,
+    });
+  };
+
   return (
     <div className="py-8 px-4 max-w-5xl mx-auto">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Verschwörungstheorien im Kontext</h1>
-        <p className="text-gray-600 dark:text-gray-300">
+      <motion.div 
+        className="mb-8"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <div className="flex items-center justify-between mb-2">
+          <h1 className="text-3xl font-bold text-white">Verschwörungstheorien im Kontext</h1>
+          <div className="flex space-x-3">
+            <Button 
+              onClick={handleNewTopicClick}
+              className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white border border-cyan-400/30 shadow-md"
+            >
+              <img src={categoryIcon} alt="New" className="w-5 h-5 mr-2" />
+              Neues Thema
+            </Button>
+            <Button 
+              onClick={handleUploadClick}
+              className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white border border-cyan-400/30 shadow-md"
+            >
+              <img src={fireLvl2} alt="Upload" className="w-5 h-5 mr-2" />
+              Upload
+            </Button>
+          </div>
+        </div>
+        <p className="text-gray-300">
           Eine historische und kritische Betrachtung von Verschwörungstheorien vom 18. bis 21. Jahrhundert.
         </p>
-      </div>
+      </motion.div>
       
       {/* Statistics */}
       <div className="mb-8 grid grid-cols-4 gap-4">

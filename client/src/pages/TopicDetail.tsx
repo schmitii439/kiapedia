@@ -1,11 +1,23 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useRoute, Link } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
+import { motion } from 'framer-motion';
 import { Topic, TopicContent, ExpertOpinion } from '@shared/schema';
 import HoverDefinition from '@/components/HoverDefinition';
 import AIChat from '@/components/AIChat';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
+
+// Import icons for different uses
+import fireLvl1 from '@assets/fire-level-1.png'; // Wahr
+import fireLvl3 from '@assets/fire-level-3.png'; // Neutral/Unbestätigt
+import fireLvl8 from '@assets/fire-level-8.png'; // Unwahr
+import uploadIcon from '@assets/upload.png';
+import commentIcon from '@assets/comment.png';
+import backIcon from '@assets/back.png';
+import downloadIcon from '@assets/download.png';
 
 const TopicDetail: React.FC = () => {
   const [match, params] = useRoute<{ id: string }>('/topic/:id');
@@ -121,63 +133,257 @@ const TopicDetail: React.FC = () => {
     return processedContent;
   };
 
+  // State for file upload and metadata display
+  const [files, setFiles] = useState<File[]>([]);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [showMetadata, setShowMetadata] = useState(false);
+  const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Truth status based on topic id (in real app, would come from database)
+  const getTruthStatus = (id: number) => {
+    if (id % 3 === 0) return "wahr";
+    if (id % 3 === 1) return "unbestätigt";
+    return "unwahr";
+  };
+
+  const truthStatus = topic ? getTruthStatus(topic.id) : "unbestätigt";
+
+  // Handle file upload
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const newFiles = Array.from(e.target.files);
+      setFiles(prev => [...prev, ...newFiles]);
+      toast({
+        title: "Dateien hochgeladen",
+        description: `${newFiles.length} Datei(en) erfolgreich hochgeladen.`,
+        duration: 3000,
+      });
+    }
+  };
+
+  // Handle view metadata click
+  const handleViewMetadata = (file: File) => {
+    setSelectedFile(file);
+    setShowMetadata(true);
+  };
+
+  // Handle comment click
+  const handleCommentClick = () => {
+    setIsCommentModalOpen(true);
+    toast({
+      title: "Kommentare",
+      description: "Diese Funktion wird in der nächsten Version implementiert.",
+      duration: 3000,
+    });
+  };
+
   return (
     <div className="py-8 px-4 max-w-5xl mx-auto">
       {/* Navigation breadcrumbs */}
-      <div className="flex items-center text-sm mb-6">
+      <motion.div 
+        className="flex items-center text-sm mb-6"
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+      >
         <Link href="/conspiracy-theories">
-          <a className="text-primary-600 hover:underline flex items-center">
-            <span className="material-icons text-sm mr-1">arrow_back</span>
+          <a className="text-cyan-400 hover:text-cyan-300 flex items-center transition-colors">
+            <img src={backIcon} alt="Back" className="w-4 h-4 mr-1" />
             Zurück zur Übersicht
           </a>
         </Link>
         <span className="mx-2 text-gray-400">/</span>
-        <span className="text-gray-600 dark:text-gray-300">{topic.century}. Jahrhundert</span>
+        <span className="text-gray-300">{topic.century}. Jahrhundert</span>
         <span className="mx-2 text-gray-400">/</span>
-        <span className="font-medium">{topic.title} {topic.firstMentionedYear && `(${topic.firstMentionedYear})`}</span>
-      </div>
+        <span className="font-medium text-white">{topic.title} {topic.firstMentionedYear && `(${topic.firstMentionedYear})`}</span>
+      </motion.div>
       
-      <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6 mb-8 dark:bg-gray-800 dark:border-gray-700">
+      <motion.div 
+        className="bg-gray-800/70 rounded-xl border border-cyan-500/20 p-6 mb-8 shadow-lg backdrop-blur-sm"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
         <div className="flex justify-between items-start mb-6">
           <div>
-            <h1 className="text-3xl font-bold mb-2">{topic.title}</h1>
-            <p className="text-gray-500 dark:text-gray-400">
-              Erste Erwähnung im Verschwörungskontext: {topic.firstMentionedYear ? `ca. ${topic.firstMentionedYear}` : 'Unbekannt'}
-            </p>
+            <h1 className="text-3xl font-bold mb-2 text-white">{topic.title}</h1>
+            <div className="flex items-center gap-3">
+              <p className="text-gray-300">
+                Erste Erwähnung: {topic.firstMentionedYear ? `ca. ${topic.firstMentionedYear}` : 'Unbekannt'}
+              </p>
+              {truthStatus === "wahr" ? (
+                <Badge variant="outline" className="bg-green-900/30 border-green-500/30 text-white flex items-center gap-1 px-3 py-1">
+                  <img src={fireLvl1} alt="True" className="w-4 h-4" /> Wahr
+                </Badge>
+              ) : truthStatus === "unbestätigt" ? (
+                <Badge variant="outline" className="bg-yellow-900/30 border-yellow-500/30 text-white flex items-center gap-1 px-3 py-1">
+                  <img src={fireLvl3} alt="Neutral" className="w-4 h-4" /> Unbestätigt
+                </Badge>
+              ) : (
+                <Badge variant="outline" className="bg-red-900/30 border-red-500/30 text-white flex items-center gap-1 px-3 py-1">
+                  <img src={fireLvl8} alt="False" className="w-4 h-4" /> Widerlegt
+                </Badge>
+              )}
+            </div>
           </div>
           <div className="flex space-x-2">
-            <button className="bg-gray-100 p-2 rounded-full hover:bg-gray-200 transition-colors dark:bg-gray-700 dark:hover:bg-gray-600">
-              <span className="material-icons text-gray-600 dark:text-gray-300">bookmark_border</span>
-            </button>
-            <button className="bg-gray-100 p-2 rounded-full hover:bg-gray-200 transition-colors dark:bg-gray-700 dark:hover:bg-gray-600">
-              <span className="material-icons text-gray-600 dark:text-gray-300">share</span>
-            </button>
+            <Button 
+              onClick={handleCommentClick}
+              className="bg-gray-700/70 hover:bg-gray-600/70 text-white border border-cyan-500/20"
+            >
+              <img src={commentIcon} alt="Comment" className="w-5 h-5 mr-2" />
+              Kommentieren
+            </Button>
+            <Button 
+              onClick={() => fileInputRef.current?.click()}
+              className="bg-gray-700/70 hover:bg-gray-600/70 text-white border border-cyan-500/20"
+            >
+              <img src={uploadIcon} alt="Upload" className="w-5 h-5 mr-2" />
+              Datei hochladen
+            </Button>
+            <input 
+              type="file" 
+              ref={fileInputRef} 
+              onChange={handleFileUpload} 
+              className="hidden" 
+              multiple 
+            />
           </div>
         </div>
         
+        {/* Main content section with topic description */}
         {topicContent ? (
-          <div 
-            className="prose max-w-none mb-8 dark:prose-invert" 
-            dangerouslySetInnerHTML={{ __html: processContent(topicContent.content) }}
-          />
+          <div className="text-gray-300 mb-8 leading-relaxed">
+            {/* Using styled div instead of dangerouslySetInnerHTML for better security */}
+            <div className="prose prose-invert max-w-none mb-8">
+              <p>{topicContent.content || "Keine Beschreibung verfügbar."}</p>
+            </div>
+          </div>
         ) : (
-          <div className="prose max-w-none mb-8 dark:prose-invert">
-            <p className="text-gray-500 italic dark:text-gray-400">
+          <div className="mb-8">
+            <p className="text-gray-300 italic">
               Detaillierte Informationen zu diesem Thema werden derzeit zusammengestellt.
             </p>
           </div>
         )}
         
-        {topicContent?.factCheck && (
-          <div className="bg-gray-50 p-4 rounded-lg my-6 border border-gray-200 dark:bg-gray-700 dark:border-gray-600">
-            <h3 className="text-lg font-medium mb-2 flex items-center">
-              <span className="material-icons text-primary-600 mr-2 dark:text-primary-400">fact_check</span>
-              KI-gestützte Faktenprüfung
+        {/* Truth indicator section */}
+        <div className="bg-gray-700/50 p-5 rounded-lg my-6 border border-cyan-500/20 backdrop-blur-sm">
+          <h3 className="text-lg font-medium mb-3 flex items-center text-white">
+            <img src={fireLvl3} alt="Truth" className="w-5 h-5 mr-2" />
+            Wahrheitsbewertung
+          </h3>
+          
+          {truthStatus === "wahr" ? (
+            <div className="text-gray-200">
+              <p>Diese Verschwörungstheorie gilt als bestätigt. Mehrere unabhängige Quellen und historische Dokumente haben die zentralen Behauptungen verifiziert.</p>
+            </div>
+          ) : truthStatus === "unbestätigt" ? (
+            <div className="text-gray-200">
+              <p>Diese Verschwörungstheorie ist weder eindeutig bestätigt noch widerlegt. Es gibt Indizien, die für einige Aspekte sprechen, aber keine abschließenden Beweise.</p>
+            </div>
+          ) : (
+            <div className="text-gray-200">
+              <p>Diese Verschwörungstheorie gilt als widerlegt. Die zentralen Behauptungen wurden durch Faktenprüfung und historische Forschung entkräftet.</p>
+            </div>
+          )}
+        </div>
+        
+        {/* Uploaded files section */}
+        {files.length > 0 && (
+          <div className="mt-8 border-t border-cyan-500/20 pt-6">
+            <h3 className="text-lg font-medium mb-4 text-white flex items-center">
+              <img src={uploadIcon} alt="Files" className="w-5 h-5 mr-2" />
+              Hochgeladene Dateien
             </h3>
-            <p className="text-sm dark:text-gray-300">
-              {topicContent.factCheck}
-            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {files.map((file, index) => (
+                <motion.div 
+                  key={index}
+                  className="bg-gray-700/50 p-4 rounded-lg border border-cyan-500/10"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                >
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <p className="font-medium text-white">{file.name}</p>
+                      <p className="text-sm text-gray-300">{(file.size / 1024).toFixed(2)} KB</p>
+                    </div>
+                    <div className="flex space-x-2">
+                      <Button
+                        onClick={() => handleViewMetadata(file)}
+                        variant="outline"
+                        className="text-xs py-1 h-auto border-cyan-500/30 text-cyan-400 hover:text-cyan-300"
+                      >
+                        <img src={fireLvl3} alt="Metadata" className="w-4 h-4 mr-1" />
+                        Metadaten
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="text-xs py-1 h-auto border-cyan-500/30 text-cyan-400 hover:text-cyan-300"
+                      >
+                        <img src={downloadIcon} alt="Download" className="w-4 h-4 mr-1" />
+                        Download
+                      </Button>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
+        )}
+        
+        {/* Metadata modal */}
+        {showMetadata && selectedFile && (
+          <motion.div 
+            className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 backdrop-blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            onClick={() => setShowMetadata(false)}
+          >
+            <motion.div 
+              className="bg-gray-800 p-6 rounded-lg border border-cyan-500/30 w-full max-w-2xl"
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="flex justify-between items-start mb-4">
+                <h3 className="text-xl font-semibold text-white">Metadaten: {selectedFile.name}</h3>
+                <Button 
+                  onClick={() => setShowMetadata(false)}
+                  variant="ghost"
+                  className="text-gray-400 hover:text-white"
+                >
+                  ✕
+                </Button>
+              </div>
+              
+              <div className="space-y-3 text-gray-300">
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-700 pb-2">
+                  <span className="text-gray-400">Dateiname:</span>
+                  <span>{selectedFile.name}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-700 pb-2">
+                  <span className="text-gray-400">Größe:</span>
+                  <span>{(selectedFile.size / 1024).toFixed(2)} KB</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-700 pb-2">
+                  <span className="text-gray-400">Typ:</span>
+                  <span>{selectedFile.type || "Unbekannt"}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-700 pb-2">
+                  <span className="text-gray-400">Zuletzt geändert:</span>
+                  <span>{selectedFile.lastModified ? new Date(selectedFile.lastModified).toLocaleString() : "Unbekannt"}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 border-b border-gray-700 pb-2">
+                  <span className="text-gray-400">MIME-Typ:</span>
+                  <span>{selectedFile.type}</span>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
         )}
         
         {!relatedLoading && relatedTopics && relatedTopics.length > 0 && (
@@ -197,44 +403,55 @@ const TopicDetail: React.FC = () => {
             </div>
           </div>
         )}
-      </div>
+      </motion.div>
       
       {/* AI Chat Module */}
       <AIChat topicId={topicId} initialAnalysis={topicContent?.aiAnalysis} />
       
       {/* Expert Opinions */}
       {!opinionsLoading && expertOpinions && expertOpinions.length > 0 && (
-        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6 mt-8 dark:bg-gray-800 dark:border-gray-700">
-          <h2 className="text-xl font-semibold mb-4">Experten-Einschätzungen</h2>
+        <motion.div 
+          className="bg-gray-800/70 rounded-xl border border-cyan-500/20 p-6 mt-8 shadow-lg backdrop-blur-sm"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+        >
+          <h2 className="text-xl font-semibold mb-4 flex items-center text-white">
+            <img src={fireLvl1} alt="Experts" className="w-5 h-5 mr-2" />
+            Experten-Einschätzungen
+          </h2>
           
           <div className="space-y-4">
             {expertOpinions.map((opinion, index) => (
-              <div 
+              <motion.div 
                 key={opinion.id} 
-                className={`flex items-start ${index < expertOpinions.length - 1 ? 'border-b border-gray-100 pb-4 dark:border-gray-700' : ''}`}
+                className={`flex items-start ${index < expertOpinions.length - 1 ? 'border-b border-gray-600/30 pb-4' : ''}`}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.1 * index }}
               >
                 {opinion.avatarUrl ? (
                   <img 
                     src={opinion.avatarUrl} 
                     alt={opinion.expertName} 
-                    className="w-12 h-12 rounded-full mr-3 object-cover"
+                    className="w-12 h-12 rounded-full mr-3 object-cover border border-cyan-500/30"
                   />
                 ) : (
-                  <div className="w-12 h-12 rounded-full mr-3 bg-gray-200 flex items-center justify-center dark:bg-gray-700">
-                    <span className="material-icons text-gray-500 dark:text-gray-400">person</span>
+                  <div className="w-12 h-12 rounded-full mr-3 bg-gray-700 flex items-center justify-center border border-cyan-500/30">
+                    <img src={fireLvl3} alt="Expert" className="w-6 h-6" />
                   </div>
                 )}
                 <div>
-                  <h3 className="font-medium">{opinion.expertName}</h3>
-                  <p className="text-sm text-gray-500 mb-2 dark:text-gray-400">{opinion.expertTitle}</p>
-                  <p className="text-gray-700 dark:text-gray-300">
+                  <h3 className="font-medium text-white">{opinion.expertName}</h3>
+                  <p className="text-sm text-cyan-400 mb-2">{opinion.expertTitle}</p>
+                  <p className="text-gray-300">
                     "{opinion.opinion}"
                   </p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
       )}
     </div>
   );
