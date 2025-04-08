@@ -117,54 +117,7 @@ const Home: React.FC = () => {
           </motion.div>
         </motion.div>
         
-        {/* Animated menu arrow indicator */}
-        <motion.div 
-          className="fixed top-1/2 right-6 cursor-pointer z-50 transform -translate-y-1/2"
-          initial={{ x: 10, opacity: 0 }}
-          animate={{ 
-            x: 0, 
-            opacity: [0, 0.7, 0.5, 0.7, 0], 
-          }}
-          transition={{ 
-            duration: 3,
-            repeat: Infinity,
-            repeatType: "loop",
-            repeatDelay: 1.5,
-            times: [0, 0.3, 0.5, 0.7, 1] 
-          }}
-        >
-          <div className="flex flex-col items-center">
-            <motion.div 
-              animate={{ x: [0, -5, 0] }}
-              transition={{ 
-                repeat: Infinity, 
-                duration: 1.5,
-                repeatType: "reverse"
-              }}
-              className="text-cyan-300 text-sm mb-2 tracking-wide font-medium"
-            >
-              <span className="uppercase">Menü</span>
-            </motion.div>
-            <motion.div
-              whileHover={{ scale: 1.2 }}
-              className="bg-cyan-500/20 border border-cyan-400/30 backdrop-blur-sm rounded-full p-2 shadow-lg shadow-cyan-500/20"
-            >
-              <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                width="24" height="24" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="2" 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                className="text-cyan-300"
-              >
-                <path d="M9 18l6-6-6-6"/>
-              </svg>
-            </motion.div>
-          </div>
-        </motion.div>
+        {/* Menu arrow indicator removed as requested */}
         
         {/* Animated decorative elements */}
         <div className="fixed inset-0 pointer-events-none">

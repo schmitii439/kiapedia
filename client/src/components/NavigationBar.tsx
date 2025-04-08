@@ -8,15 +8,13 @@ interface NavigationBarProps {
   mode?: 'vertical' | 'horizontal';
   hideSearch?: boolean;
   hideSocial?: boolean;
-  userIcon?: string;
 }
 
 const NavigationBar: React.FC<NavigationBarProps> = ({ 
   onShowSearchField, 
   mode = 'vertical',
   hideSearch = false,
-  hideSocial = false,
-  userIcon
+  hideSocial = false
 }) => {
   const [darkMode, setDarkMode] = useState(true); // Default to dark mode
   const [location] = useLocation();
@@ -135,13 +133,9 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
               className="text-gray-300 hover:text-cyan-300 hover:bg-gray-800/50 transition-all flex items-center gap-3 w-full text-left p-2 rounded-md" 
               title="Login"
             >
-              {userIcon ? (
-                <img src={userIcon} alt="User" className="h-5 w-5 rounded-full object-cover" />
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-              )}
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
               <span className="text-sm font-medium">Login</span>
             </button>
           </motion.div>
@@ -257,13 +251,9 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
               title="Login"
             >
               <div className="p-3 rounded-full hover:bg-gray-800/50">
-                {userIcon ? (
-                  <img src={userIcon} alt="User" className="h-6 w-6 rounded-full object-cover" />
-                ) : (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
-                )}
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
               </div>
               <span className="text-xs mt-1">Login</span>
             </button>

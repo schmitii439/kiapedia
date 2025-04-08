@@ -4,7 +4,7 @@ import NavigationBar from '@/components/NavigationBar';
 import SearchField from '@/components/SearchField';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useLocation } from 'wouter';
-import userIcon from '@assets/kiapedia-logo.png';
+// User icon comes from NavigationBar component
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -98,7 +98,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                       mode="horizontal"
                       hideSocial={isCategoryPage}
                       hideSearch={isCategoryPage}
-                      userIcon={userIcon}
                     />
                   </div>
                 </motion.div>
