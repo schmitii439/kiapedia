@@ -60,19 +60,7 @@ const Logo: React.FC<LogoProps> = ({ showSlogan = false }) => {
           </motion.p>
         )}
         
-        {/* Menu indicator - only on home page */}
-        {isHomePage && (
-          <motion.div 
-            className="absolute bottom-0 -right-5 mt-1 text-cyan-400 text-xs flex items-center opacity-0 group-hover:opacity-100 transition-opacity"
-            animate={{ x: [0, 3, 0] }}
-            transition={{ repeat: Infinity, duration: 1.5 }}
-          >
-            <span>Menü</span>
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" />
-            </svg>
-          </motion.div>
-        )}
+        {/* Menu indicator removed */}
       </div>
       
       {/* Animated glow effect behind the logo */}
