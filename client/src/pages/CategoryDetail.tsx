@@ -11,6 +11,9 @@ import { TbExclamationMark } from 'react-icons/tb';
 
 // Import images
 import backIcon from '@assets/back.png';
+
+import image_1744088815316 from '@assets/image_1744088815316.jpeg';
+
 import fireLvl1 from '@assets/fire-level-1.png';
 import fireLvl3 from '@assets/fire-level-3.png';
 import fireLvl5 from '@assets/fire-level-5.png';
@@ -343,6 +346,11 @@ const CategoryDetail: React.FC = () => {
               <motion.div 
                 key={topic.id}
                 className="bg-gray-700/50 rounded-lg overflow-hidden border border-cyan-500/10 hover:border-cyan-500/30 transition-all hover:shadow-lg group"
+                style={{
+                  backgroundImage: topic.title === "Wetterkontrolle" ? `linear-gradient(to bottom, rgba(31, 41, 55, 0.8), rgba(17, 24, 39, 0.95)), url(${image_1744088815316})` : undefined,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center'
+                }}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
