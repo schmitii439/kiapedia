@@ -347,7 +347,7 @@ const CategoryDetail: React.FC = () => {
                 key={topic.id}
                 className="bg-gray-700/50 rounded-lg overflow-hidden border border-cyan-500/10 hover:border-cyan-500/30 transition-all hover:shadow-lg group"
                 style={{
-                  backgroundImage: topic.title === "Wetterkontrolle" ? `linear-gradient(to bottom, rgba(31, 41, 55, 0.8), rgba(17, 24, 39, 0.95)), url(${image_1744088815316})` : undefined,
+                  backgroundImage: topic.title === "Wetterkontrolle" ? `linear-gradient(to bottom, rgba(31, 41, 55, 0.6), rgba(17, 24, 39, 0.85)), url(${image_1744088815316})` : undefined,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center'
                 }}
