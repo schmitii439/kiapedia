@@ -30,7 +30,9 @@ const verschwörungsKategorien = [
     topics: [
       { id: 101, title: "Chemtrails", year: 1996, description: "Theorie über angebliche chemische Zusätze in Flugzeugabgasen zur Wetterveränderung oder Bevölkerungskontrolle." },
       { id: 102, title: "Sonnenspiegel", year: 2010, description: "Behauptung, dass riesige Spiegel im Weltall installiert werden, um Sonnenlicht zurück ins All zu reflektieren." },
-      { id: 103, title: "Wetterkontrolle", year: 1953, description: "Verschwörungstheorie über staatliche Programme zur künstlichen Kontrolle von Wetterphänomenen." }
+      { id: 103, title: "Wetterkontrolle", year: 1953, description: "Verschwörungstheorie über staatliche Programme zur künstlichen Kontrolle von Wetterphänomenen." },
+      { id: 104, title: "Frequenzen", year: 2005, description: "Theorie, dass bestimmte Schwingungen oder 5G-Frequenzen zur Bewusstseinskontrolle oder Gesundheitsschädigung eingesetzt werden." },
+      { id: 105, title: "Antarktis", year: 1950, description: "Schauplatz vieler Spekulationen über geheime Basen, alte Zivilisationen oder verborgene Technologien." }
     ]
   },
   {
@@ -38,9 +40,16 @@ const verschwörungsKategorien = [
     title: "Geheimgesellschaften",
     description: "Theorien über angebliche geheime Organisationen, die im Verborgenen die Weltgeschicke lenken.",
     topics: [
-      { id: 201, title: "Illuminati", year: 1776, description: "Behauptungen über eine geheime Elite, die im Verborgenen die Weltpolitik steuert." },
-      { id: 202, title: "Freimaurer", year: 1717, description: "Verschwörungstheorien über den angeblichen globalen Einfluss der Freimaurerlogen." },
-      { id: 203, title: "Bilderberg-Gruppe", year: 1954, description: "Theorie über einen angeblichen geheimen Weltrat aus Wirtschafts- und Politikeliten." }
+      { id: 201, title: "Illuminaten", year: 1776, description: "1776 gegründeter Geheimbund, der durch Aufklärung die Herrschaft von Menschen über Menschen abschaffen wollte." },
+      { id: 202, title: "Freimaurer", year: 1717, description: "Ethischer Bund zur Selbstverbesserung und Förderung von Freiheit, Gleichheit und Brüderlichkeit." },
+      { id: 203, title: "Bilderberg-Gruppe", year: 1954, description: "Seit 1954 jährlich tagende Versammlung globaler Eliten aus Politik, Wirtschaft und Wissenschaft." },
+      { id: 204, title: "Templer-Orden", year: 1119, description: "Mittelalterlicher Ritter-Mönchs-Orden zum Schutz von Pilgern, 1312 aufgelöst." },
+      { id: 205, title: "Bruderschaft von Zion", year: 1956, description: "1956 gegründete Geheimgesellschaft mit christlichem Hintergrund zur Bewahrung geheimer Reliquien." },
+      { id: 206, title: "Skull & Bones", year: 1832, description: "Geheime Studentenverbindung an der Yale University mit einflussreichen Mitgliedern und mysteriösen Ritualen." },
+      { id: 207, title: "Assassinen", year: 1080, description: "Islamische Geheimgesellschaft (1080–1270), berüchtigt für gezielte politische Attentate." },
+      { id: 208, title: "Okkulte Rosenkreuzer", year: 1614, description: "Esoterische Strömung, die auf den Rosenkreuzer-Mythos aufbaut und okkulte Praktiken sowie mystische Lehren in den Mittelpunkt stellt." },
+      { id: 209, title: "Sonnentempler", year: 1984, description: "1984 gegründeter apokalyptischer Kult, der christlich-esoterische Ideen mit rituellen Selbstmorden und Massenmorden in den Jahren 1994–1997 verband." },
+      { id: 210, title: "Die Kabale", year: 1950, description: "Geheimes Eliten-Netzwerk, dem nach Verschwörungstheorien globale Kontrolle und Manipulation zugeschrieben wird." }
     ]
   },
   {
@@ -50,7 +59,12 @@ const verschwörungsKategorien = [
     topics: [
       { id: 301, title: "5G und Gesundheit", year: 2018, description: "Verschwörungstheorie über angebliche gesundheitsschädliche Wirkungen von 5G-Mobilfunktechnologie." },
       { id: 302, title: "RFID-Chips", year: 2005, description: "Behauptungen über Pläne zur Zwangsimplantierung von Funkchips zur Überwachung der Bevölkerung." },
-      { id: 303, title: "Künstliche Intelligenz", year: 2010, description: "Theorien über KI-Systeme, die angeblich heimlich die Kontrolle übernehmen sollen." }
+      { id: 303, title: "Künstliche Intelligenz", year: 2010, description: "Theorien über KI-Systeme, die angeblich heimlich die Kontrolle übernehmen sollen." },
+      { id: 304, title: "MK Ultra", year: 1953, description: "Tatsächliches CIA-Programm zur Gedankenkontrolle durch Drogen und psychologische Manipulation in den 1950er–70er Jahren." },
+      { id: 305, title: "AREA 51", year: 1955, description: "Hochsicherheitsgelände der US-Regierung, das mit UFOs und außerirdischen Technologien in Verbindung gebracht wird." },
+      { id: 306, title: "Reptiloide", year: 1970, description: "Theorie, dass außerirdische Echsenwesen in Menschengestalt die Welt kontrollieren." },
+      { id: 307, title: "Außerirdische", year: 1947, description: "Häufige Erklärung für unerklärliche Phänomene, Technologie oder Eingriffe in die Menschheitsgeschichte." },
+      { id: 308, title: "Annunaki", year: 1976, description: "Mythische Wesen aus der sumerischen Mythologie, laut Theorien außerirdische Schöpfer der Menschheit." }
     ]
   },
   {
@@ -60,7 +74,26 @@ const verschwörungsKategorien = [
     topics: [
       { id: 401, title: "Deep State", year: 1960, description: "Theorie über einen angeblichen 'Staat im Staate', der unabhängig von demokratischen Prozessen agiert." },
       { id: 402, title: "Wahlmanipulation", year: 1876, description: "Verschwörungstheorien über systematische Wahlfälschungen in demokratischen Staaten." },
-      { id: 403, title: "False Flag Operationen", year: 1898, description: "Behauptungen, dass Regierungen heimlich Terroranschläge inszenieren, um politische Ziele zu erreichen." }
+      { id: 403, title: "False Flag Operationen", year: 1898, description: "Behauptungen, dass Regierungen heimlich Terroranschläge inszenieren, um politische Ziele zu erreichen." },
+      { id: 404, title: "QAnon", year: 2017, description: "US-Verschwörungsbewegung, die glaubt, eine Elite betreibe Kinderhandel und Trump kämpfe im Geheimen dagegen." },
+      { id: 405, title: "BlackRock", year: 2008, description: "Weltgrößter Vermögensverwalter, oft Ziel von Spekulationen über geheimen Einfluss auf Politik, Wirtschaft und Medien." },
+      { id: 406, title: "Corona (COVID-19)", year: 2019, description: "Pandemie, um die sich viele Theorien über geplante Laborausbrüche, Impfmanipulation und globale Kontrolle ranken." },
+      { id: 407, title: "Pizzagate", year: 2016, description: "Falsche Theorie, dass in einer Pizzeria ein Kinderhändlerring um US-Politiker agierte." },
+      { id: 408, title: "9/11", year: 2001, description: "Die Terroranschläge vom 11. September 2001, bei denen manche einen Inside-Job oder gezielte Sprengung vermuten." },
+      { id: 409, title: "Clinton Body Count", year: 1993, description: "Theorie, dass viele Tote im Umfeld der Clintons auf geheimnisvolle Weise ums Leben kamen." },
+      { id: 410, title: "Adolf Hitler", year: 1945, description: "Diktator, über den Verschwörungen behaupten, er habe überlebt oder sich okkulter Kräfte bedient." },
+      { id: 411, title: "Reichsbürger", year: 1985, description: "Bewegung in Deutschland, die die Existenz der Bundesrepublik leugnet und eigene 'Reiche' ausruft." },
+      { id: 412, title: "Agententheorie", year: 1960, description: "Annahme, dass prominente Persönlichkeiten oder Aktivisten in Wahrheit gesteuerte Geheimdienst-Agenten sind." }
+    ]
+  },
+  {
+    id: 5,
+    title: "Prominente & Ereignisse",
+    description: "Verschwörungstheorien rund um bekannte Persönlichkeiten und historische Ereignisse.",
+    topics: [
+      { id: 501, title: "John F. Kennedy", year: 1963, description: "US-Präsident, dessen Ermordung 1963 zahlreiche Verschwörungstheorien über Geheimdienste und Schattenmächte auslöste." },
+      { id: 502, title: "Tupac", year: 1996, description: "Ermordeter Rapper, um dessen Tod sich Gerüchte über ein mögliches Überleben oder politische Motive ranken." },
+      { id: 503, title: "Michael Jackson", year: 2009, description: "Popstar, dessen Tod 2009 viele für fingiert halten oder mit dunklen Mächten in Verbindung bringen." }
     ]
   }
 ];
