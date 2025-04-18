@@ -76,13 +76,13 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
               className={`transition-all flex items-center gap-3 p-2 rounded-md ${isActive('/') ? 'bg-cyan-900/30 text-cyan-300' : 'text-gray-300 hover:text-cyan-300 hover:bg-gray-800/50'}`}
               title="Startseite"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
               </svg>
               <span className="text-sm font-medium">Home</span>
             </Link>
           </motion.div>
-          
+
           {/* Search option (conditionally rendered) */}
           {!hideSearch && (
             <motion.div
@@ -96,14 +96,14 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
                 className="text-gray-300 hover:text-cyan-300 hover:bg-gray-800/50 transition-all flex items-center gap-3 w-full text-left p-2 rounded-md" 
                 title="Suchen"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
                 <span className="text-sm font-medium">Suchen</span>
               </button>
             </motion.div>
           )}
-          
+
           <motion.div
             custom={2}
             initial="hidden"
@@ -115,13 +115,13 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
               className={`transition-all flex items-center gap-3 p-2 rounded-md ${isActive('/categories') || location.startsWith('/category/') ? 'bg-cyan-900/30 text-cyan-300' : 'text-gray-300 hover:text-cyan-300 hover:bg-gray-800/50'}`}
               title="Verschwörungen"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
               </svg>
               <span className="text-sm font-medium">Theorien</span>
             </Link>
           </motion.div>
-          
+
           <motion.div
             custom={3}
             initial="hidden"
@@ -133,7 +133,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
               className="text-gray-300 hover:text-cyan-300 hover:bg-gray-800/50 transition-all flex items-center gap-3 w-full text-left p-2 rounded-md" 
               title="Login"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
               <span className="text-sm font-medium">Login</span>
@@ -155,12 +155,12 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
         transition={{ delay: 0.5, duration: 0.3 }}
       >
         <Link href="/" className="text-gray-400 hover:text-cyan-400 transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
         </Link>
       </motion.div>
-      
+
       {/* Navigation heading */}
       <motion.div 
         className="mb-10 mt-4 text-cyan-500 text-sm font-semibold rotate-90 tracking-widest"
@@ -170,7 +170,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
       >
         NAVIGATION
       </motion.div>
-      
+
       {/* Main navigation items */}
       <div className="flex flex-col items-center space-y-10">
         <motion.div
@@ -185,14 +185,14 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
             title="Startseite"
           >
             <div className={`p-3 rounded-full ${isActive('/') ? 'bg-cyan-900/30' : 'hover:bg-gray-800/50'}`}>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
               </svg>
             </div>
             <span className="text-xs mt-1">Home</span>
           </Link>
         </motion.div>
-        
+
         {!hideSearch && (
           <motion.div
             custom={1}
@@ -206,7 +206,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
               title="Suchen"
             >
               <div className="p-3 rounded-full hover:bg-gray-800/50">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </div>
@@ -214,7 +214,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
             </button>
           </motion.div>
         )}
-        
+
         <motion.div
           custom={2}
           initial="hidden"
@@ -227,7 +227,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
             title="Verschwörungen"
           >
             <div className={`p-3 rounded-full ${isActive('/categories') || location.startsWith('/category/') ? 'bg-cyan-900/30' : 'hover:bg-gray-800/50'}`}>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
               </svg>
             </div>
@@ -235,7 +235,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
           </Link>
         </motion.div>
       </div>
-      
+
       {/* Footer items */}
       {!hideSocial && (
         <div className="mt-auto flex flex-col items-center space-y-6">
@@ -251,14 +251,14 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
               title="Login"
             >
               <div className="p-3 rounded-full hover:bg-gray-800/50">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
               </div>
               <span className="text-xs mt-1">Login</span>
             </button>
           </motion.div>
-          
+
           <motion.div 
             className="mb-5 opacity-60"
             custom={4}
@@ -273,7 +273,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
           </motion.div>
         </div>
       )}
-      
+
       {/* Decorative elements */}
       <motion.div 
         className="absolute top-1/2 -translate-y-1/2 left-0 w-[1px] h-[30%]"
