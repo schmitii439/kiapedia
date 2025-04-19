@@ -17,83 +17,230 @@ import fireLvl8 from '@assets/fire-level-8.png';
 import categoryIcon from '@assets/category.png';
 import infoIcon from '@assets/info.png';
 
-// Import the Geo-Engineering image (Chemtrails image wird nur bei der Themenseite verwendet)
+// Import various images for topics
 import geoEngineeringImg from '@assets/DALL·E 2025-04-08 05.11.19 - A subtle, realistic photomontage designed for a website background, illustrating the concept of geo-engineering without text. The image features a wid.webp';
+import weatherControlImg from '@assets/DALL·E 2025-04-19 01.29.27 - A hyper-realistic futuristic scene depicting weather control. A large dome-shaped control station is situated in the middle of a vast landscape, with .webp';
+import chemtrailsImg from '@assets/DALL·E 2025-04-08 05.09.55 - A subtle, realistic photomontage intended as a website background, depicting a high-altitude airplane dispersing visible chemtrails across a partly cl.webp';
 
 // Define categories with example topics
 const verschwörungsKategorien = [
   {
     id: 1,
-    title: "Geo-Engineering",
-    image: geoEngineeringImg,
-    description: "Verschwörungstheorien rund um gezielte großflächige Eingriffe in geochemische Kreisläufe der Erde.",
+    title: "Geheimgesellschaften",
+    description: "Theorien über angebliche geheime Organisationen, die im Verborgenen die Weltgeschicke lenken.",
     topics: [
-      { id: 101, title: "Chemtrails", year: 1996, description: "Theorie über angebliche chemische Zusätze in Flugzeugabgasen zur Wetterveränderung oder Bevölkerungskontrolle." },
-      { id: 102, title: "Sonnenspiegel", year: 2010, description: "Behauptung, dass riesige Spiegel im Weltall installiert werden, um Sonnenlicht zurück ins All zu reflektieren." },
-      { id: 103, title: "Wetterkontrolle", year: 1953, description: "Verschwörungstheorie über staatliche Programme zur künstlichen Kontrolle von Wetterphänomenen." },
-      { id: 104, title: "Frequenzen", year: 2005, description: "Theorie, dass bestimmte Schwingungen oder 5G-Frequenzen zur Bewusstseinskontrolle oder Gesundheitsschädigung eingesetzt werden." },
-      { id: 105, title: "Antarktis", year: 1950, description: "Schauplatz vieler Spekulationen über geheime Basen, alte Zivilisationen oder verborgene Technologien." }
+      { id: 101, title: "Orden der Illuminaten", year: 1776, description: "1776 gegründeter Geheimbund, der durch Aufklärung die Herrschaft von Menschen über Menschen abschaffen wollte." },
+      { id: 102, title: "Loge der Freimaurer", year: 1717, description: "Ethischer Bund zur Selbstverbesserung und Förderung von Freiheit, Gleichheit und Brüderlichkeit." },
+      { id: 103, title: "Bilderberg-Gruppe", year: 1954, description: "Seit 1954 jährlich tagende Versammlung globaler Eliten aus Politik, Wirtschaft und Wissenschaft." },
+      { id: 104, title: "Templer-Orden", year: 1119, description: "Mittelalterlicher Ritter-Mönchs-Orden zum Schutz von Pilgern, 1312 aufgelöst." },
+      { id: 105, title: "Bruderschaft von Zion", year: 1956, description: "1956 gegründete Geheimgesellschaft mit christlichem Hintergrund zur Bewahrung geheimer Reliquien." },
+      { id: 106, title: "Skull & Bones", year: 1832, description: "Geheime Studentenverbindung an der Yale University mit einflussreichen Mitgliedern und mysteriösen Ritualen." },
+      { id: 107, title: "Assassinen", year: 1080, description: "Islamische Geheimgesellschaft (1080–1270), berüchtigt für gezielte politische Attentate." },
+      { id: 108, title: "Okkulte Rosenkreuzer", year: 1614, description: "Esoterische Strömung, die auf den Rosenkreuzer-Mythos aufbaut und okkulte Praktiken sowie mystische Lehren in den Mittelpunkt stellt." },
+      { id: 109, title: "Sonnentempler", year: 1984, description: "1984 gegründeter apokalyptischer Kult, der christlich-esoterische Ideen mit rituellen Selbstmorden und Massenmorden in den Jahren 1994–1997 verband." }
     ]
   },
   {
     id: 2,
-    title: "Geheimgesellschaften",
-    description: "Theorien über angebliche geheime Organisationen, die im Verborgenen die Weltgeschicke lenken.",
+    title: "John F. Kennedy",
+    image: geoEngineeringImg,
+    description: "US-Präsident, dessen Ermordung 1963 zahlreiche Verschwörungstheorien über Geheimdienste und Schattenmächte auslöste.",
     topics: [
-      { id: 201, title: "Illuminaten", year: 1776, description: "1776 gegründeter Geheimbund, der durch Aufklärung die Herrschaft von Menschen über Menschen abschaffen wollte." },
-      { id: 202, title: "Freimaurer", year: 1717, description: "Ethischer Bund zur Selbstverbesserung und Förderung von Freiheit, Gleichheit und Brüderlichkeit." },
-      { id: 203, title: "Bilderberg-Gruppe", year: 1954, description: "Seit 1954 jährlich tagende Versammlung globaler Eliten aus Politik, Wirtschaft und Wissenschaft." },
-      { id: 204, title: "Templer-Orden", year: 1119, description: "Mittelalterlicher Ritter-Mönchs-Orden zum Schutz von Pilgern, 1312 aufgelöst." },
-      { id: 205, title: "Bruderschaft von Zion", year: 1956, description: "1956 gegründete Geheimgesellschaft mit christlichem Hintergrund zur Bewahrung geheimer Reliquien." },
-      { id: 206, title: "Skull & Bones", year: 1832, description: "Geheime Studentenverbindung an der Yale University mit einflussreichen Mitgliedern und mysteriösen Ritualen." },
-      { id: 207, title: "Assassinen", year: 1080, description: "Islamische Geheimgesellschaft (1080–1270), berüchtigt für gezielte politische Attentate." },
-      { id: 208, title: "Okkulte Rosenkreuzer", year: 1614, description: "Esoterische Strömung, die auf den Rosenkreuzer-Mythos aufbaut und okkulte Praktiken sowie mystische Lehren in den Mittelpunkt stellt." },
-      { id: 209, title: "Sonnentempler", year: 1984, description: "1984 gegründeter apokalyptischer Kult, der christlich-esoterische Ideen mit rituellen Selbstmorden und Massenmorden in den Jahren 1994–1997 verband." },
-      { id: 210, title: "Die Kabale", year: 1950, description: "Geheimes Eliten-Netzwerk, dem nach Verschwörungstheorien globale Kontrolle und Manipulation zugeschrieben wird." }
+      { id: 201, title: "Warren-Kommission", year: 1964, description: "Offizielle Untersuchungskommission, deren Ergebnisse viele anzweifeln." },
+      { id: 202, title: "Grassy Knoll", year: 1963, description: "Theorie über einen zweiten Schützen auf dem Grashügel in Dallas." },
+      { id: 203, title: "CIA-Verbindung", year: 1963, description: "Behauptungen über eine Beteiligung des US-Geheimdienstes am Attentat." }
     ]
   },
   {
     id: 3,
-    title: "Technologie-Verschwörungen",
-    description: "Verschwörungstheorien im Zusammenhang mit modernen Technologien und deren angeblichen versteckten Zwecken.",
+    title: "Die Kabale",
+    description: "Geheimes Eliten-Netzwerk, dem nach Verschwörungstheorien globale Kontrolle und Manipulation zugeschrieben wird.",
     topics: [
-      { id: 301, title: "5G und Gesundheit", year: 2018, description: "Verschwörungstheorie über angebliche gesundheitsschädliche Wirkungen von 5G-Mobilfunktechnologie." },
-      { id: 302, title: "RFID-Chips", year: 2005, description: "Behauptungen über Pläne zur Zwangsimplantierung von Funkchips zur Überwachung der Bevölkerung." },
-      { id: 303, title: "Künstliche Intelligenz", year: 2010, description: "Theorien über KI-Systeme, die angeblich heimlich die Kontrolle übernehmen sollen." },
-      { id: 304, title: "MK Ultra", year: 1953, description: "Tatsächliches CIA-Programm zur Gedankenkontrolle durch Drogen und psychologische Manipulation in den 1950er–70er Jahren." },
-      { id: 305, title: "AREA 51", year: 1955, description: "Hochsicherheitsgelände der US-Regierung, das mit UFOs und außerirdischen Technologien in Verbindung gebracht wird." },
-      { id: 306, title: "Reptiloide", year: 1970, description: "Theorie, dass außerirdische Echsenwesen in Menschengestalt die Welt kontrollieren." },
-      { id: 307, title: "Außerirdische", year: 1947, description: "Häufige Erklärung für unerklärliche Phänomene, Technologie oder Eingriffe in die Menschheitsgeschichte." },
-      { id: 308, title: "Annunaki", year: 1976, description: "Mythische Wesen aus der sumerischen Mythologie, laut Theorien außerirdische Schöpfer der Menschheit." }
+      { id: 301, title: "Globale Elite", year: 1950, description: "Angebliche Gruppe von Superreichen, die im Verborgenen die Weltpolitik steuern." },
+      { id: 302, title: "New World Order", year: 1990, description: "Theorie über Pläne zur Errichtung einer autoritären Weltregierung." },
+      { id: 303, title: "Deep State", year: 1960, description: "Vorstellung von einem verborgenen Machtzentrum innerhalb demokratischer Regierungen." }
     ]
   },
   {
     id: 4,
-    title: "Politische Verschwörungen",
-    description: "Verschwörungstheorien zu angeblichen geheimen politischen Machenschaften und Manipulationen.",
+    title: "Frequenzen",
+    image: chemtrailsImg,
+    description: "Theorie, dass bestimmte Schwingungen oder 5G-Frequenzen zur Bewusstseinskontrolle oder Gesundheitsschädigung eingesetzt werden.",
     topics: [
-      { id: 401, title: "Deep State", year: 1960, description: "Theorie über einen angeblichen 'Staat im Staate', der unabhängig von demokratischen Prozessen agiert." },
-      { id: 402, title: "Wahlmanipulation", year: 1876, description: "Verschwörungstheorien über systematische Wahlfälschungen in demokratischen Staaten." },
-      { id: 403, title: "False Flag Operationen", year: 1898, description: "Behauptungen, dass Regierungen heimlich Terroranschläge inszenieren, um politische Ziele zu erreichen." },
-      { id: 404, title: "QAnon", year: 2017, description: "US-Verschwörungsbewegung, die glaubt, eine Elite betreibe Kinderhandel und Trump kämpfe im Geheimen dagegen." },
-      { id: 405, title: "BlackRock", year: 2008, description: "Weltgrößter Vermögensverwalter, oft Ziel von Spekulationen über geheimen Einfluss auf Politik, Wirtschaft und Medien." },
-      { id: 406, title: "Corona (COVID-19)", year: 2019, description: "Pandemie, um die sich viele Theorien über geplante Laborausbrüche, Impfmanipulation und globale Kontrolle ranken." },
-      { id: 407, title: "Pizzagate", year: 2016, description: "Falsche Theorie, dass in einer Pizzeria ein Kinderhändlerring um US-Politiker agierte." },
-      { id: 408, title: "9/11", year: 2001, description: "Die Terroranschläge vom 11. September 2001, bei denen manche einen Inside-Job oder gezielte Sprengung vermuten." },
-      { id: 409, title: "Clinton Body Count", year: 1993, description: "Theorie, dass viele Tote im Umfeld der Clintons auf geheimnisvolle Weise ums Leben kamen." },
-      { id: 410, title: "Adolf Hitler", year: 1945, description: "Diktator, über den Verschwörungen behaupten, er habe überlebt oder sich okkulter Kräfte bedient." },
-      { id: 411, title: "Reichsbürger", year: 1985, description: "Bewegung in Deutschland, die die Existenz der Bundesrepublik leugnet und eigene 'Reiche' ausruft." },
-      { id: 412, title: "Agententheorie", year: 1960, description: "Annahme, dass prominente Persönlichkeiten oder Aktivisten in Wahrheit gesteuerte Geheimdienst-Agenten sind." }
+      { id: 401, title: "5G-Strahlung", year: 2018, description: "Behauptungen über gesundheitsschädliche Auswirkungen von 5G-Mobilfunkmasten." },
+      { id: 402, title: "Schumann-Resonanz", year: 1952, description: "Überzeugung, dass Veränderungen in der Erdresonanz menschliches Bewusstsein beeinflussen." },
+      { id: 403, title: "HAARP", year: 1993, description: "Vorwürfe, dass ein US-Forschungsprogramm zur Wetterveränderung und Gedankenkontrolle eingesetzt wird." }
     ]
   },
   {
     id: 5,
-    title: "Prominente & Ereignisse",
-    description: "Verschwörungstheorien rund um bekannte Persönlichkeiten und historische Ereignisse.",
+    title: "QAnon",
+    description: "US-Verschwörungsbewegung, die glaubt, eine Elite betreibe Kinderhandel und Trump kämpfe im Geheimen dagegen.",
     topics: [
-      { id: 501, title: "John F. Kennedy", year: 1963, description: "US-Präsident, dessen Ermordung 1963 zahlreiche Verschwörungstheorien über Geheimdienste und Schattenmächte auslöste." },
-      { id: 502, title: "Tupac", year: 1996, description: "Ermordeter Rapper, um dessen Tod sich Gerüchte über ein mögliches Überleben oder politische Motive ranken." },
-      { id: 503, title: "Michael Jackson", year: 2009, description: "Popstar, dessen Tod 2009 viele für fingiert halten oder mit dunklen Mächten in Verbindung bringen." }
+      { id: 501, title: "Q-Drops", year: 2017, description: "Kryptische Nachrichten eines angeblichen Insiders namens 'Q' auf Internetforen." },
+      { id: 502, title: "The Storm", year: 2018, description: "Vorhergesagte Massenverhaztungen von korrupten Eliten und Pädophilen." },
+      { id: 503, title: "Deepstate", year: 2017, description: "Annahme eines geheimen Netzwerks innerhalb der US-Regierung gegen Trump." }
+    ]
+  },
+  {
+    id: 6,
+    title: "MK Ultra",
+    description: "Tatsächliches CIA-Programm zur Gedankenkontrolle durch Drogen und psychologische Manipulation in den 1950er–70er Jahren.",
+    topics: [
+      { id: 601, title: "LSD-Experimente", year: 1953, description: "Dokumentierte Versuche mit Psychedelika an unwissenden Testpersonen." },
+      { id: 602, title: "Monarch-Programm", year: 1960, description: "Angebliches Unterprogramm zur Erzeugung von programmierbaren Agenten durch Trauma." },
+      { id: 603, title: "Manchurian Candidate", year: 1962, description: "Theorie über die Erschaffung von hypnotisch programmierten Attentätern." }
+    ]
+  },
+  {
+    id: 7,
+    title: "BlackRock",
+    description: "Weltgrößter Vermögensverwalter, oft Ziel von Spekulationen über geheimen Einfluss auf Politik, Wirtschaft und Medien.",
+    topics: [
+      { id: 701, title: "Aladdin-System", year: 2000, description: "Vermutungen über BlackRocks KI-System zur Kontrolle globaler Finanzmärkte." },
+      { id: 702, title: "ESG-Manipulation", year: 2020, description: "Theorien über die Nutzung von Nachhaltigkeitskriterien zur wirtschaftlichen Kontrolle." },
+      { id: 703, title: "Wirtschafts-Schattenregierung", year: 2008, description: "Behauptungen über direkte Einflussnahme auf politische Entscheidungen weltweit." }
+    ]
+  },
+  {
+    id: 8,
+    title: "Corona (COVID-19)",
+    description: "Pandemie, um die sich viele Theorien über geplante Laborausbrüche, Impfmanipulation und globale Kontrolle ranken.",
+    topics: [
+      { id: 801, title: "Laborleck", year: 2020, description: "Theorien über einen künstlichen Ursprung des Virus in einem chinesischen Labor." },
+      { id: 802, title: "5G-Verbindung", year: 2020, description: "Unbelegte Behauptung, 5G-Strahlung verursache COVID-19-Symptome." },
+      { id: 803, title: "The Great Reset", year: 2020, description: "Vorstellung, die Pandemie sei geplant, um eine neue Weltordnung zu errichten." }
+    ]
+  },
+  {
+    id: 9,
+    title: "Pizzagate",
+    description: "Falsche Theorie, dass in einer Pizzeria ein Kinderhändlerring um US-Politiker agierte.",
+    topics: [
+      { id: 901, title: "Comet Ping Pong", year: 2016, description: "Pizzeria in Washington D.C., die als angebliches Zentrum eines Pädophilenrings bezeichnet wurde." },
+      { id: 902, title: "E-Mail-Codes", year: 2016, description: "Fehlinterpretation von Ausdrücken in den geleakten E-Mails des Clinton-Wahlkampfteams." },
+      { id: 903, title: "Schießerei", year: 2016, description: "Vorfall, bei dem ein bewaffneter Mann die Pizzeria betrat, um die angeblichen Opfer zu befreien." }
+    ]
+  },
+  {
+    id: 10,
+    title: "9/11",
+    description: "Die Terroranschläge vom 11. September 2001, bei denen manche einen Inside-Job oder gezielte Sprengung vermuten.",
+    topics: [
+      { id: 1001, title: "Controlled Demolition", year: 2001, description: "Behauptung, die Twin Towers seien durch kontrollierte Sprengung zum Einsturz gebracht worden." },
+      { id: 1002, title: "WTC 7", year: 2001, description: "Theorien zum Einsturz des dritten Gebäudes, das nicht direkt von Flugzeugen getroffen wurde." },
+      { id: 1003, title: "Pentagon-Angriff", year: 2001, description: "Zweifel daran, dass ein Flugzeug das Pentagon getroffen hat." }
+    ]
+  },
+  {
+    id: 11,
+    title: "Tupac",
+    description: "Ermordeter Rapper, um dessen Tod sich Gerüchte über ein mögliches Überleben oder politische Motive ranken.",
+    topics: [
+      { id: 1101, title: "Überlebentheorie", year: 1996, description: "Annahme, Tupac habe seinen Tod inszeniert und lebe im Ausland." },
+      { id: 1102, title: "FBI-Beteiligung", year: 1996, description: "Vermutungen über eine Beteiligung des FBI aufgrund von Tupacs politischem Aktivismus." },
+      { id: 1103, title: "Posthume Veröffentlichungen", year: 1997, description: "Deutung der zahlreichen posthumen Alben als Beweis für voraufgezeichnetes Material." }
+    ]
+  },
+  {
+    id: 12,
+    title: "Michael Jackson",
+    description: "Popstar, dessen Tod 2009 viele für fingiert halten oder mit dunklen Mächten in Verbindung bringen.",
+    topics: [
+      { id: 1201, title: "Todesinszenierung", year: 2009, description: "Theorie, Jackson habe seinen Tod vorgetäuscht, um der Öffentlichkeit zu entkommen." },
+      { id: 1202, title: "Propofol-Mord", year: 2009, description: "Behauptungen über einen absichtlichen Mord durch den Arzt oder die Musikindustrie." },
+      { id: 1203, title: "Doppelgänger", year: 2009, description: "Spekulationen, nach 1999 sei ein Doppelgänger an Jacksons Stelle aufgetreten." }
+    ]
+  },
+  {
+    id: 13,
+    title: "Reptiloide",
+    description: "Theorie, dass außerirdische Echsenwesen in Menschengestalt die Welt kontrollieren.",
+    topics: [
+      { id: 1301, title: "Gestaltwandler", year: 1998, description: "Vorstellung, Reptiloide könnten menschliche Form annehmen und wichtige Positionen besetzen." },
+      { id: 1302, title: "Blutlinien", year: 1999, description: "Theorie über reptilische Abstammung bestimmter Königshäuser und Eliten." },
+      { id: 1303, title: "Hollow Earth", year: 1991, description: "Annahme, Reptiloide lebten im Inneren der als hohl angenommenen Erde." }
+    ]
+  },
+  {
+    id: 14,
+    title: "Reichsbürger",
+    description: "Bewegung in Deutschland, die die Existenz der Bundesrepublik leugnet und eigene 'Reiche' ausruft.",
+    topics: [
+      { id: 1401, title: "BRD GmbH", year: 1985, description: "Falsche Behauptung, Deutschland sei eine Firma und kein souveräner Staat." },
+      { id: 1402, title: "Deutsches Reich", year: 1985, description: "Annahme, das Deutsche Reich bestehe rechtlich fort und sei nur handlungsunfähig." },
+      { id: 1403, title: "Selbstverwaltung", year: 2000, description: "Praxis, eigene 'Staaten' oder 'Königreiche' auf deutschem Territorium zu proklamieren." }
+    ]
+  },
+  {
+    id: 15,
+    title: "Antarktis",
+    description: "Schauplatz vieler Spekulationen über geheime Basen, alte Zivilisationen oder verborgene Technologien.",
+    topics: [
+      { id: 1501, title: "Neuschwabenland", year: 1938, description: "Mythos einer geheimen Nazi-Basis in der Antarktis, die nach dem Krieg weiterexistierte." },
+      { id: 1502, title: "Operation Highjump", year: 1946, description: "Umdeutung einer US-Militärmission als Kampf gegen überlebende Nazis oder Außerirdische." },
+      { id: 1503, title: "Eiswand", year: 2015, description: "Behauptung der Flat-Earth-Bewegung, die Antarktis sei eine umfassende Eisbarriere am Rand der Welt." }
+    ]
+  },
+  {
+    id: 16,
+    title: "Agententheorie",
+    description: "Annahme, dass prominente Persönlichkeiten oder Aktivisten in Wahrheit gesteuerte Geheimdienst-Agenten sind.",
+    topics: [
+      { id: 1601, title: "Controlled Opposition", year: 1960, description: "Theorie, dass Oppositionsbewegungen heimlich von den bekämpften Mächten kontrolliert werden." },
+      { id: 1602, title: "Deep Cover", year: 1970, description: "Vorstellung von Agenten, die jahrzehntelang verdeckt in Schlüsselpositionen eingesetzt werden." },
+      { id: 1603, title: "Crisis Actors", year: 2012, description: "Behauptung, bei Katastrophen oder Anschlägen würden Schauspieler als vorgebliche Zeugen eingesetzt." }
+    ]
+  },
+  {
+    id: 17,
+    title: "AREA 51",
+    description: "Hochsicherheitsgelände der US-Regierung, das mit UFOs und außerirdischen Technologien in Verbindung gebracht wird.",
+    topics: [
+      { id: 1701, title: "Roswell-Connection", year: 1947, description: "Annahme, in Area 51 würden Alien-Technologie und -Leichen vom Roswell-Absturz untersucht." },
+      { id: 1702, title: "Unterirdische Anlagen", year: 1989, description: "Behauptungen über massive unterirdische Komplexe mit außerirdischer Präsenz." },
+      { id: 1703, title: "Reverse Engineering", year: 1989, description: "Theorie, die USA entwickelten Technologien durch Nachbau abgestürzter UFOs." }
+    ]
+  },
+  {
+    id: 18,
+    title: "Clinton Body Count",
+    description: "Theorie, dass viele Tote im Umfeld der Clintons auf geheimnisvolle Weise ums Leben kamen.",
+    topics: [
+      { id: 1801, title: "Vince Foster", year: 1993, description: "Spekulationen über den Suizid eines Clinton-Beraters, der als Mord dargestellt wird." },
+      { id: 1802, title: "Seth Rich", year: 2016, description: "Unbelegte Verbindung zwischen einem ermordeten DNC-Mitarbeiter und den Clinton-E-Mail-Leaks." },
+      { id: 1803, title: "Epstein-Verbindung", year: 2019, description: "Behauptungen einer Clinton-Beteiligung am Tod des verurteilten Sexualstraftäters Jeffrey Epstein." }
+    ]
+  },
+  {
+    id: 19,
+    title: "Annunaki",
+    description: "Mythische Wesen aus der sumerischen Mythologie, laut Theorien außerirdische Schöpfer der Menschheit.",
+    topics: [
+      { id: 1901, title: "Genetische Manipulation", year: 1976, description: "Theorie, die Annunaki hätten Hominiden genetisch zu modernen Menschen umgewandelt." },
+      { id: 1902, title: "Nibiru", year: 1976, description: "Vorstellung eines angeblichen Planeten der Annunaki, der sich periodisch der Erde nähert." },
+      { id: 1903, title: "Gold Mining", year: 1976, description: "Behauptung, die Annunaki hätten Menschen erschaffen, um Gold für ihren Heimatplaneten zu schürfen." }
+    ]
+  },
+  {
+    id: 20,
+    title: "Adolf Hitler",
+    description: "Diktator, über den Verschwörungen behaupten, er habe überlebt oder sich okkulter Kräfte bedient.",
+    topics: [
+      { id: 2001, title: "Flucht nach Argentinien", year: 1945, description: "Theorie, Hitler sei nicht in Berlin gestorben, sondern nach Südamerika entkommen." },
+      { id: 2002, title: "Antarktis-Basis", year: 1947, description: "Spekulation über ein Überleben in einer geheimen Basis in der Antarktis." },
+      { id: 2003, title: "Thule-Gesellschaft", year: 1918, description: "Behauptungen über Hitlers Verbindungen zu okkulten Gruppen und Praktiken." }
+    ]
+  },
+  {
+    id: 21,
+    title: "Außerirdische",
+    image: weatherControlImg,
+    description: "Häufige Erklärung für unerklärliche Phänomene, Technologie oder Eingriffe in die Menschheitsgeschichte.",
+    topics: [
+      { id: 2101, title: "Ancient Aliens", year: 1968, description: "These, außerirdische Besucher hätten frühe menschliche Zivilisationen beeinflusst oder erschaffen." },
+      { id: 2102, title: "Entführungen", year: 1961, description: "Berichte über angebliche Entführungen durch Außerirdische zu Untersuchungszwecken." },
+      { id: 2103, title: "Cattle Mutilations", year: 1967, description: "Unerklärliche Verstümmelungen von Nutztieren, die Außerirdischen zugeschrieben werden." }
     ]
   }
 ];
@@ -238,7 +385,7 @@ const Categories: React.FC = () => {
               transition={{ duration: 0.5, delay: category.id * 0.1 }}
               whileHover={{ 
                 scale: 1.02, 
-                boxShadow: "0 0 20px rgba(6, 182, 212, 0.3)",
+                boxShadow: "0 0 20px rgba(6, 182, 212, 0.3)"
               }}
               whileTap={{ scale: 0.98 }}
             >
