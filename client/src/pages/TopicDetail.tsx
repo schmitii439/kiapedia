@@ -19,6 +19,7 @@ import uploadIcon from '@assets/upload.png';
 import commentIcon from '@assets/comment.png';
 import backIcon from '@assets/back.png';
 import downloadIcon from '@assets/download.png';
+import infoIcon from '@assets/info.png';
 
 // Import theme-specific background images (nur für bestimmte Themen)
 import chemtrailsImg from '@assets/DALL·E 2025-04-08 05.09.55 - A subtle, realistic photomontage intended as a website background, depicting a high-altitude airplane dispersing visible chemtrails across a partly cl.webp';

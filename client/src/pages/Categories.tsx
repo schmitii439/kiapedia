@@ -27,6 +27,10 @@ import geheimgesellschaftenImg from '/assets/geheimgesellschaften.png';
 import kennedyImg from '/assets/kennedy.png';
 import kabaleImg from '/assets/kabale.png';
 import frequenzenImg from '/assets/frequenzen.png';
+import qanonImg from '/assets/qanon.webp';
+import mkultraImg from '/assets/mkultra.webp';
+import blackrockImg from '/assets/blackrock.webp';
+import coronaImg from '/assets/corona.webp';
 
 // Define categories with example topics
 const verschwörungsKategorien = [
@@ -85,6 +89,7 @@ const verschwörungsKategorien = [
   {
     id: 5,
     title: "QAnon",
+    image: qanonImg,
     description: "US-Verschwörungsbewegung, die glaubt, eine Elite betreibe Kinderhandel und Trump kämpfe im Geheimen dagegen.",
     topics: [
       { id: 501, title: "Q-Drops", year: 2017, description: "Kryptische Nachrichten eines angeblichen Insiders namens 'Q' auf Internetforen." },
@@ -95,6 +100,7 @@ const verschwörungsKategorien = [
   {
     id: 6,
     title: "MK Ultra",
+    image: mkultraImg,
     description: "Tatsächliches CIA-Programm zur Gedankenkontrolle durch Drogen und psychologische Manipulation in den 1950er–70er Jahren.",
     topics: [
       { id: 601, title: "LSD-Experimente", year: 1953, description: "Dokumentierte Versuche mit Psychedelika an unwissenden Testpersonen." },
@@ -105,6 +111,7 @@ const verschwörungsKategorien = [
   {
     id: 7,
     title: "BlackRock",
+    image: blackrockImg,
     description: "Weltgrößter Vermögensverwalter, oft Ziel von Spekulationen über geheimen Einfluss auf Politik, Wirtschaft und Medien.",
     topics: [
       { id: 701, title: "Aladdin-System", year: 2000, description: "Vermutungen über BlackRocks KI-System zur Kontrolle globaler Finanzmärkte." },
@@ -115,6 +122,7 @@ const verschwörungsKategorien = [
   {
     id: 8,
     title: "Corona (COVID-19)",
+    image: coronaImg,
     description: "Pandemie, um die sich viele Theorien über geplante Laborausbrüche, Impfmanipulation und globale Kontrolle ranken.",
     topics: [
       { id: 801, title: "Laborleck", year: 2020, description: "Theorien über einen künstlichen Ursprung des Virus in einem chinesischen Labor." },
