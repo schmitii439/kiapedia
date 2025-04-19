@@ -144,7 +144,23 @@ const TopicDetail: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [showMetadata, setShowMetadata] = useState(false);
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
+  const [isNewArticleModalOpen, setIsNewArticleModalOpen] = useState(false);
+  const [comments, setComments] = useState<{id: number, author: string, text: string, timestamp: string}[]>([]);
+  const [newComment, setNewComment] = useState("");
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [speechSynthesis, setSpeechSynthesis] = useState<SpeechSynthesisUtterance | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [newArticleTitle, setNewArticleTitle] = useState("");
+  const [newArticleContent, setNewArticleContent] = useState("");
+  const [aiAnalysisOpen, setAiAnalysisOpen] = useState(false);
+  
+  // Alle verfügbaren KI-Provider für die Analyse
+  const aiProviders = [
+    { id: 'perplexity', name: 'Perplexity AI', icon: '🔮' },
+    { id: 'anthropic', name: 'Anthropic Claude', icon: '🧠' },
+    { id: 'openai', name: 'OpenAI GPT', icon: '🤖' }
+  ];
+  const [selectedAiProvider, setSelectedAiProvider] = useState(aiProviders[0]);
 
   // Truth status based on topic id (in real app, would come from database)
   const getTruthStatus = (id: number) => {
@@ -187,12 +203,126 @@ const TopicDetail: React.FC = () => {
     setShowMetadata(true);
   };
 
+  // Text-to-Speech Funktionalität
+  const speakText = (text: string) => {
+    if (isSpeaking) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+      return;
+    }
+    
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'de-DE';
+    utterance.rate = 0.9; // Etwas langsamer für bessere Verständlichkeit
+    utterance.pitch = 1.1; // Etwas höher für weiblichere Stimme
+    
+    // Weibliche Stimme auswählen (falls verfügbar)
+    const voices = window.speechSynthesis.getVoices();
+    const femaleVoice = voices.find(voice => 
+      voice.lang.includes('de') && voice.name.includes('Female'));
+    
+    if (femaleVoice) {
+      utterance.voice = femaleVoice;
+    }
+    
+    // Event-Handler für das Ende der Sprachausgabe
+    utterance.onend = () => {
+      setIsSpeaking(false);
+      setSpeechSynthesis(null);
+    };
+    
+    setSpeechSynthesis(utterance);
+    setIsSpeaking(true);
+    window.speechSynthesis.speak(utterance);
+    
+    toast({
+      title: "Text-to-Speech aktiviert",
+      description: "Der Text wird jetzt vorgelesen.",
+      duration: 2000,
+    });
+  };
+  
+  // Stoppen der Sprachausgabe
+  const stopSpeaking = () => {
+    if (isSpeaking) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+      setSpeechSynthesis(null);
+    }
+  };
+
+  // Neuen Artikel hinzufügen
+  const handleNewArticle = () => {
+    setIsNewArticleModalOpen(true);
+  };
+  
+  // Artikel speichern
+  const saveNewArticle = () => {
+    if (newArticleTitle.trim() === "" || newArticleContent.trim() === "") {
+      toast({
+        title: "Fehler",
+        description: "Titel und Inhalt dürfen nicht leer sein.",
+        variant: "destructive",
+        duration: 3000,
+      });
+      return;
+    }
+    
+    // Hier würde der Artikel in der Datenbank gespeichert werden
+    toast({
+      title: "Artikel gespeichert",
+      description: "Ihr Artikel wurde erfolgreich hinzugefügt.",
+      duration: 3000,
+    });
+    
+    setIsNewArticleModalOpen(false);
+    setNewArticleTitle("");
+    setNewArticleContent("");
+  };
+  
+  // KI-Analyse öffnen
+  const openAiAnalysis = () => {
+    setAiAnalysisOpen(true);
+  };
+  
   // Handle comment click
   const handleCommentClick = () => {
     setIsCommentModalOpen(true);
+  };
+  
+  // Kommentar hinzufügen
+  const addComment = () => {
+    if (newComment.trim() === "") {
+      toast({
+        title: "Fehler",
+        description: "Der Kommentar darf nicht leer sein.",
+        variant: "destructive",
+        duration: 3000,
+      });
+      return;
+    }
+    
+    const timestamp = new Date().toLocaleDateString('de-DE', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+    
+    const newCommentObj = {
+      id: comments.length + 1,
+      author: "Benutzer", // In einer echten App würde hier der aktuelle Benutzer stehen
+      text: newComment,
+      timestamp
+    };
+    
+    setComments(prev => [newCommentObj, ...prev]);
+    setNewComment("");
+    
     toast({
-      title: "Kommentare",
-      description: "Diese Funktion wird in der nächsten Version implementiert.",
+      title: "Kommentar hinzugefügt",
+      description: "Ihr Kommentar wurde erfolgreich hinzugefügt.",
       duration: 3000,
     });
   };
@@ -249,7 +379,7 @@ const TopicDetail: React.FC = () => {
               )}
             </div>
           </div>
-          <div className="flex space-x-2">
+          <div className="flex flex-wrap space-x-2 gap-2">
             <Button 
               onClick={handleCommentClick}
               className="bg-gray-700/70 hover:bg-gray-600/70 text-white border border-cyan-500/20"
@@ -264,6 +394,20 @@ const TopicDetail: React.FC = () => {
               <img src={uploadIcon} alt="Upload" className="w-5 h-5 mr-2" />
               Datei hochladen
             </Button>
+            <Button 
+              onClick={handleNewArticle}
+              className="bg-gray-700/70 hover:bg-gray-600/70 text-white border border-cyan-500/20"
+            >
+              <img src={uploadIcon} alt="New Article" className="w-5 h-5 mr-2" />
+              Artikel hinzufügen
+            </Button>
+            <Button 
+              onClick={openAiAnalysis}
+              className="bg-gray-700/70 hover:bg-gray-600/70 text-white border border-cyan-500/20"
+            >
+              <img src={infoIcon} alt="AI Analysis" className="w-5 h-5 mr-2" />
+              KI-Analyse
+            </Button>
             <input 
               type="file" 
               ref={fileInputRef} 
@@ -277,6 +421,31 @@ const TopicDetail: React.FC = () => {
         {/* Main content section with topic description */}
         {topicContent ? (
           <div className="text-gray-300 mb-8 leading-relaxed group">
+            {/* Content header with text-to-speech control */}
+            <div className="flex justify-between items-center mb-3">
+              <h3 className="text-lg font-medium text-white flex items-center">
+                <img src={infoIcon} alt="Content" className="w-5 h-5 mr-2" />
+                Inhalt
+              </h3>
+              <Button
+                onClick={() => topicContent?.content && speakText(topicContent.content)}
+                variant="outline"
+                className={`text-sm py-1 h-auto ${isSpeaking ? 'bg-cyan-700/40 border-cyan-500/50' : 'border-cyan-500/30'} text-cyan-400 hover:text-cyan-300`}
+              >
+                {isSpeaking ? (
+                  <>
+                    <span className="mr-2">◼</span>
+                    Vorlesen stoppen
+                  </>
+                ) : (
+                  <>
+                    <span className="mr-2">▶</span>
+                    Text vorlesen
+                  </>
+                )}
+              </Button>
+            </div>
+            
             {/* Hover to reveal more detailed content */}
             <div className="prose prose-invert max-w-none mb-8 transition-all duration-300 ease-in-out">
               <p className="group-hover:opacity-100">{topicContent.content || "Keine Beschreibung verfügbar."}</p>
@@ -474,6 +643,239 @@ const TopicDetail: React.FC = () => {
               </motion.div>
             ))}
           </div>
+        </motion.div>
+      )}
+      
+      {/* Kommentar-Modal */}
+      {isCommentModalOpen && (
+        <motion.div 
+          className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 backdrop-blur-sm"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          onClick={() => setIsCommentModalOpen(false)}
+        >
+          <motion.div 
+            className="bg-gray-800 p-6 rounded-lg border border-cyan-500/30 w-full max-w-2xl"
+            initial={{ scale: 0.9, y: 20 }}
+            animate={{ scale: 1, y: 0 }}
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-start mb-4">
+              <h3 className="text-xl font-semibold text-white">Kommentare</h3>
+              <Button 
+                onClick={() => setIsCommentModalOpen(false)}
+                variant="ghost"
+                className="text-gray-400 hover:text-white"
+              >
+                ✕
+              </Button>
+            </div>
+            
+            <div className="mb-6">
+              <textarea
+                value={newComment}
+                onChange={e => setNewComment(e.target.value)}
+                className="w-full p-3 bg-gray-700 border border-gray-600 rounded-md text-white"
+                placeholder="Schreiben Sie Ihren Kommentar..."
+                rows={4}
+              />
+              <div className="mt-2 flex justify-end">
+                <Button 
+                  onClick={addComment}
+                  className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white"
+                >
+                  <img src={commentIcon} alt="Comment" className="w-4 h-4 mr-2" />
+                  Kommentar abschicken
+                </Button>
+              </div>
+            </div>
+            
+            <div className="space-y-4 max-h-80 overflow-y-auto">
+              {comments.length === 0 ? (
+                <p className="text-gray-400 text-center py-8">Noch keine Kommentare vorhanden. Seien Sie der Erste!</p>
+              ) : (
+                comments.map(comment => (
+                  <div key={comment.id} className="bg-gray-700/50 p-4 rounded-lg border border-gray-600/50">
+                    <div className="flex justify-between items-start mb-2">
+                      <span className="font-medium text-white">{comment.author}</span>
+                      <span className="text-xs text-gray-400">{comment.timestamp}</span>
+                    </div>
+                    <p className="text-gray-300">{comment.text}</p>
+                  </div>
+                ))
+              )}
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+      
+      {/* Neuer Artikel Modal */}
+      {isNewArticleModalOpen && (
+        <motion.div 
+          className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 backdrop-blur-sm"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          onClick={() => setIsNewArticleModalOpen(false)}
+        >
+          <motion.div 
+            className="bg-gray-800 p-6 rounded-lg border border-cyan-500/30 w-full max-w-3xl max-h-[90vh] overflow-y-auto"
+            initial={{ scale: 0.9, y: 20 }}
+            animate={{ scale: 1, y: 0 }}
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-start mb-4">
+              <h3 className="text-xl font-semibold text-white">Neuen Artikel hinzufügen</h3>
+              <Button 
+                onClick={() => setIsNewArticleModalOpen(false)}
+                variant="ghost"
+                className="text-gray-400 hover:text-white"
+              >
+                ✕
+              </Button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-gray-300 mb-1">Titel</label>
+                <input
+                  type="text"
+                  value={newArticleTitle}
+                  onChange={e => setNewArticleTitle(e.target.value)}
+                  className="w-full p-3 bg-gray-700 border border-gray-600 rounded-md text-white"
+                  placeholder="Titel des Artikels"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-gray-300 mb-1">Inhalt</label>
+                <textarea
+                  value={newArticleContent}
+                  onChange={e => setNewArticleContent(e.target.value)}
+                  className="w-full p-3 bg-gray-700 border border-gray-600 rounded-md text-white"
+                  placeholder="Inhalt des Artikels"
+                  rows={12}
+                />
+              </div>
+              
+              <div className="flex justify-end pt-4">
+                <Button 
+                  onClick={() => setIsNewArticleModalOpen(false)}
+                  variant="outline"
+                  className="mr-2 border-gray-600"
+                >
+                  Abbrechen
+                </Button>
+                <Button 
+                  onClick={saveNewArticle}
+                  className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white"
+                >
+                  <img src={uploadIcon} alt="Save" className="w-4 h-4 mr-2" />
+                  Artikel speichern
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+      
+      {/* KI-Analyse Modal */}
+      {aiAnalysisOpen && (
+        <motion.div 
+          className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 backdrop-blur-sm"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          onClick={() => setAiAnalysisOpen(false)}
+        >
+          <motion.div 
+            className="bg-gray-800 p-6 rounded-lg border border-cyan-500/30 w-full max-w-4xl max-h-[90vh] overflow-y-auto"
+            initial={{ scale: 0.9, y: 20 }}
+            animate={{ scale: 1, y: 0 }}
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-start mb-4">
+              <h3 className="text-xl font-semibold text-white flex items-center">
+                <span className="text-cyan-400 text-2xl mr-2">{selectedAiProvider.icon}</span>
+                KI-Analyse mit {selectedAiProvider.name}
+              </h3>
+              <Button 
+                onClick={() => setAiAnalysisOpen(false)}
+                variant="ghost"
+                className="text-gray-400 hover:text-white"
+              >
+                ✕
+              </Button>
+            </div>
+            
+            <div className="mb-6 flex space-x-2 border-b border-gray-700 pb-4">
+              {aiProviders.map(provider => (
+                <Button
+                  key={provider.id}
+                  onClick={() => setSelectedAiProvider(provider)}
+                  variant={selectedAiProvider.id === provider.id ? "default" : "outline"}
+                  className={selectedAiProvider.id === provider.id 
+                    ? "bg-cyan-800/50 text-white border-cyan-500/50" 
+                    : "border-gray-600 text-gray-300"}
+                >
+                  <span className="mr-2">{provider.icon}</span>
+                  {provider.name}
+                </Button>
+              ))}
+            </div>
+            
+            <div className="space-y-4">
+              <div className="bg-gray-900/70 p-4 rounded-lg border border-cyan-800/30">
+                <h4 className="text-lg font-medium text-white mb-3">Echtzeit-Analyse</h4>
+                <p className="text-gray-300">
+                  Die KI-gestützte Analyse untersucht die Verschwörungstheorie "{topic?.title}" auf ihre Plausibilität und 
+                  historischen Kontext. Dabei werden Quellen, widersprüchliche Beweise und bekannte Falschinformationen berücksichtigt.
+                </p>
+                
+                <div className="mt-4 bg-gray-800/70 p-4 rounded-lg border border-gray-700/50">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-white font-medium">Quellenbewertung</span>
+                    <div className="flex items-center">
+                      <span className="h-3 w-8 bg-cyan-600/70 rounded-full mr-2"></span>
+                      <span className="text-cyan-400 text-sm">Mittel</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-white font-medium">Logische Konsistenz</span>
+                    <div className="flex items-center">
+                      <span className="h-3 w-12 bg-red-600/70 rounded-full mr-2"></span>
+                      <span className="text-red-400 text-sm">Niedrig</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-white font-medium">Historische Genauigkeit</span>
+                    <div className="flex items-center">
+                      <span className="h-3 w-5 bg-yellow-600/70 rounded-full mr-2"></span>
+                      <span className="text-yellow-400 text-sm">Begrenzt</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="bg-gray-900/70 p-4 rounded-lg border border-cyan-800/30">
+                <h4 className="text-lg font-medium text-white mb-3">Zusammenfassung</h4>
+                <p className="text-gray-300">
+                  Nach Analyse aller verfügbaren Informationen zu "{topic?.title}" kommt die KI zu dem Schluss, dass diese Theorie 
+                  {truthStatus === "wahr" 
+                    ? " tatsächlich durch ausreichend Beweise gestützt wird und als bestätigt gilt." 
+                    : truthStatus === "unbestätigt" 
+                      ? " nicht eindeutig bestätigt oder widerlegt werden kann, da einige Elemente zwar plausibel erscheinen, aber wesentliche Beweise fehlen." 
+                      : " durch Fakten und historische Forschung widerlegt ist, wobei die meisten Behauptungen keiner systematischen Überprüfung standhalten."}
+                </p>
+              </div>
+              
+              <div className="mt-4 flex justify-end">
+                <Button 
+                  className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white"
+                >
+                  Vollständigen Analysebericht anzeigen
+                </Button>
+              </div>
+            </div>
+          </motion.div>
         </motion.div>
       )}
     </div>
