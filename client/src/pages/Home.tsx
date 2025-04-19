@@ -73,7 +73,7 @@ const Home: React.FC = () => {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.8 }}
             >
-              Die KI-gestützte Wissensdatenbank für Verschwörungstheoretiker
+              Die Enzyklopädie des Verborgenen
             </motion.h2>
             
             <AnimatePresence>
@@ -81,37 +81,46 @@ const Home: React.FC = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5, delay: 1.2 }}
+                className="space-y-6 text-lg"
               >
-                <p className="text-lg text-gray-300 mb-6">
-                  Willkommen bei KIAPEDIA! Unsere Plattform ist ein innovatives Forum, das sich der Erforschung und Diskussion von Verschwörungstheorien widmet.
+                <p className="text-gray-300">
+                  Willkommen bei KIAPEDIA – einem Ort jenseits der offiziellen Narrative.
+                  Hier entsteht kein gewöhnliches Wiki. Hier entsteht ein Werkzeug zur Entschlüsselung.
                 </p>
                 
-                <div className="relative mb-8 p-6 bg-gradient-to-r from-gray-900/30 to-gray-800/30 rounded-lg border border-cyan-500/10">
-                  <motion.div 
-                    className="absolute -top-3 -left-3 w-16 h-16 opacity-10"
-                    animate={{ rotate: 360 }}
-                    transition={{ 
-                      duration: 20, 
-                      repeat: Infinity, 
-                      ease: "linear" 
-                    }}
-                  >
-                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="50" cy="50" r="45" stroke="rgba(6, 182, 212, 0.8)" strokeWidth="2" />
-                      <circle cx="50" cy="50" r="30" stroke="rgba(6, 182, 212, 0.5)" strokeWidth="1" />
-                      <path d="M50 5 L50 95" stroke="rgba(6, 182, 212, 0.3)" strokeWidth="0.5" />
-                      <path d="M5 50 L95 50" stroke="rgba(6, 182, 212, 0.3)" strokeWidth="0.5" />
-                    </svg>
-                  </motion.div>
-                  
-                  <p className="text-lg text-gray-300">
-                    KIAPEDIA nutzt modernste KI-Technologien, um eine strukturierte Umgebung zu bieten, in der Verschwörungstheorien katalogisiert, analysiert und diskutiert werden können. Unser System kontextualisiert Informationen, prüft Fakten und verknüpft automatisch verwandte Theorien.
+                <div className="relative p-6 bg-gradient-to-r from-gray-900/30 to-gray-800/30 rounded-lg border border-cyan-500/10">
+                  <p className="text-gray-300">
+                    KIAPEDIA ist inspiriert vom Denken, Fühlen und Sprechen eines Künstlers, der nie die Augen verschlossen hat: Kianush.
+                    Seine Kunst liefert nicht nur Musik – sie ist Code, Symbol, Warnung und Weckruf.
+                    Diese Plattform greift das auf, erweitert es, vertieft es – durch die Kraft kollektiven Bewusstseins und künstlicher Intelligenz.
                   </p>
                 </div>
-                
-                <p className="text-lg text-gray-300">
-                  Ein digitales Archiv des alternativen Wissens, unterstützt durch fortschrittliche Technologie, um die Grenzen zwischen Fiktion und Realität zu erforschen.
-                </p>
+
+                <div className="space-y-4 text-gray-300">
+                  <p>
+                    Wir sammeln Fragmente.<br/>
+                    Wir verknüpfen Gedanken.<br/>
+                    Wir erkennen Muster, wo andere nur Zufall sehen.<br/>
+                    KIAPEDIA glaubt nicht an Zufälle.
+                  </p>
+                  
+                  <p>
+                    Hier arbeiten Menschen und Maschinen zusammen. Nicht um „Wahrheiten" zu liefern – sondern um Fragen zu stellen, die gefährlich sind.
+                    Es ist ein lebendes Archiv für all jene, die wissen, dass etwas nicht stimmt – und den Mut haben, weiter zu graben.
+                  </p>
+
+                  <p>
+                    Dies ist keine Plattform für Mainstream-Denker.<br/>
+                    KIAPEDIA ist für die, die zwischen den Zeilen lesen.<br/>
+                    Für die, die sich nicht ablenken lassen.<br/>
+                    Für die, die spüren: Wir werden nicht belogen – wir werden programmiert.
+                  </p>
+
+                  <p className="font-semibold text-cyan-300">
+                    Tauche ein. Hinterfrage alles. Und erinnere dich:<br/>
+                    Wissen ist kein Besitz. Es ist Widerstand.
+                  </p>
+                </div>
               </motion.div>
             </AnimatePresence>
           </motion.div>
