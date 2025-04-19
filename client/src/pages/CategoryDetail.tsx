@@ -102,12 +102,12 @@ const CategoryDetail: React.FC = () => {
     
     // Apply truth rating filter
     if (filterTruth !== 'all') {
-      const ratingThreshold = parseInt(filterTruth);
       filteredTopics = filteredTopics.filter(topic => {
         if (filterTruth === 'confirmed') return topic.truthRating >= 7;
         if (filterTruth === 'debunked') return topic.truthRating <= 3;
         if (filterTruth === 'controversial') return topic.truthRating > 3 && topic.truthRating < 7;
         if (filterTruth === 'unconfirmed') return topic.truthRating === 0;
+        if (filterTruth === 'in_progress') return topic.truthRating > 0 && topic.truthRating < 2;
         return true;
       });
     }
@@ -127,10 +127,12 @@ const CategoryDetail: React.FC = () => {
   const sortedAndFilteredTopics = getSortedAndFilteredTopics();
   
   const renderFireLevel = (rating: number) => {
-    if (rating === 0) return { icon: fireLvl5, text: "Nichts bestätigt", className: "bg-gray-800/50 border-gray-500/30" };
+    if (rating === 0) return { icon: fireLvl5, text: "Nicht bestätigt", className: "bg-gray-800/50 border-gray-500/30" };
+    if (rating > 0 && rating < 2) return { icon: fireLvl3, text: "In Bearbeitung", className: "bg-blue-900/30 border-blue-500/30" };
     if (rating >= 7) return { icon: fireLvl1, text: "Bestätigt", className: "bg-green-900/30 border-green-500/30" };
     if (rating >= 4 && rating <= 6) return { icon: fireLvl3, text: "Umstritten", className: "bg-yellow-900/30 border-yellow-500/30" };
-    return { icon: fireLvl8, text: "Widerlegt", className: "bg-red-900/30 border-red-500/30" };
+    if (rating >= 2 && rating <= 3) return { icon: fireLvl8, text: "Widerlegt", className: "bg-red-900/30 border-red-500/30" };
+    return { icon: fireLvl5, text: "Nicht bestätigt", className: "bg-gray-800/50 border-gray-500/30" };
   };
 
   return (
