@@ -341,8 +341,31 @@ const TopicDetail: React.FC = () => {
     );
   }
 
-  // Determine truth status for this topic
-  const topicTruthStatus = topic.truthRating >= 7 ? 'wahr' : (topic.truthRating <= 3 ? 'widerlegt' : 'unbestätigt');
+  // Bestimme den Wahrheitsgrad basierend auf der Topic-ID
+  // IDs 101-104: Geo-Engineering (gemischt)
+  // IDs 201-204: Geheimgesellschaften (niedriger Wahrheitsgrad)
+  // IDs 301-304: Technologie (variable Grade)
+  // IDs 401-404: Politische Theorien (hohe Wahrheitsgrade)
+  const getTruthRating = (id: number): number => {
+    const category = Math.floor(id / 100);
+    const index = id % 10;
+    
+    switch(category) {
+      case 1: // Geo-Engineering
+        return [5, 2, 6, 0][index-1] || 3;
+      case 2: // Geheimgesellschaften
+        return [2, 4, 7, 0][index-1] || 2;
+      case 3: // Technologie-Verschwörungen
+        return [1, 2, 3, 0][index-1] || 1;
+      case 4: // Politische Verschwörungen
+        return [5, 4, 2, 0][index-1] || 3;
+      default:
+        return 3;
+    }
+  };
+  
+  const truthRating = getTruthRating(topic.id);
+  const topicTruthStatus = truthRating >= 7 ? 'wahr' : (truthRating <= 3 ? 'widerlegt' : 'unbestätigt');
   const topicImage = getTopicImage(topic.id);
 
   return (
