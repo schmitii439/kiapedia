@@ -22,11 +22,18 @@ import geoEngineeringImg from '@assets/DALL·E 2025-04-08 05.11.19 - A subtle, r
 import weatherControlImg from '@assets/DALL·E 2025-04-19 01.29.27 - A hyper-realistic futuristic scene depicting weather control. A large dome-shaped control station is situated in the middle of a vast landscape, with .webp';
 import chemtrailsImg from '@assets/DALL·E 2025-04-08 05.09.55 - A subtle, realistic photomontage intended as a website background, depicting a high-altitude airplane dispersing visible chemtrails across a partly cl.webp';
 
+// Import new custom images
+import geheimgesellschaftenImg from '/assets/geheimgesellschaften.png';
+import kennedyImg from '/assets/kennedy.png';
+import kabaleImg from '/assets/kabale.png';
+import frequenzenImg from '/assets/frequenzen.png';
+
 // Define categories with example topics
 const verschwörungsKategorien = [
   {
     id: 1,
     title: "Geheimgesellschaften",
+    image: geheimgesellschaftenImg,
     description: "Theorien über angebliche geheime Organisationen, die im Verborgenen die Weltgeschicke lenken.",
     topics: [
       { id: 101, title: "Orden der Illuminaten", year: 1776, description: "1776 gegründeter Geheimbund, der durch Aufklärung die Herrschaft von Menschen über Menschen abschaffen wollte." },
@@ -43,7 +50,7 @@ const verschwörungsKategorien = [
   {
     id: 2,
     title: "John F. Kennedy",
-    image: geoEngineeringImg,
+    image: kennedyImg,
     description: "US-Präsident, dessen Ermordung 1963 zahlreiche Verschwörungstheorien über Geheimdienste und Schattenmächte auslöste.",
     topics: [
       { id: 201, title: "Warren-Kommission", year: 1964, description: "Offizielle Untersuchungskommission, deren Ergebnisse viele anzweifeln." },
@@ -54,6 +61,7 @@ const verschwörungsKategorien = [
   {
     id: 3,
     title: "Die Kabale",
+    image: kabaleImg,
     description: "Geheimes Eliten-Netzwerk, dem nach Verschwörungstheorien globale Kontrolle und Manipulation zugeschrieben wird.",
     topics: [
       { id: 301, title: "Globale Elite", year: 1950, description: "Angebliche Gruppe von Superreichen, die im Verborgenen die Weltpolitik steuern." },
@@ -64,12 +72,14 @@ const verschwörungsKategorien = [
   {
     id: 4,
     title: "Frequenzen",
-    image: chemtrailsImg,
-    description: "Theorie, dass bestimmte Schwingungen oder 5G-Frequenzen zur Bewusstseinskontrolle oder Gesundheitsschädigung eingesetzt werden.",
+    image: frequenzenImg,
+    description: "Theorie, dass bestimmte Schwingungen oder 5G-Frequenzen zur Bewusstseinskontrolle oder Gesundheitsschädigung eingesetzt werden. Einige Anhänger sehen positive Aspekte in speziellen Frequenzen, die Heilung oder spirituelles Wachstum fördern können.",
     topics: [
       { id: 401, title: "5G-Strahlung", year: 2018, description: "Behauptungen über gesundheitsschädliche Auswirkungen von 5G-Mobilfunkmasten." },
-      { id: 402, title: "Schumann-Resonanz", year: 1952, description: "Überzeugung, dass Veränderungen in der Erdresonanz menschliches Bewusstsein beeinflussen." },
-      { id: 403, title: "HAARP", year: 1993, description: "Vorwürfe, dass ein US-Forschungsprogramm zur Wetterveränderung und Gedankenkontrolle eingesetzt wird." }
+      { id: 402, title: "Schumann-Resonanz", year: 1952, description: "Überzeugung, dass Veränderungen in der Erdresonanz menschliches Bewusstsein beeinflussen und bei bestimmten Frequenzen sogar positive Effekte auf Gesundheit und Wohlbefinden haben können." },
+      { id: 403, title: "HAARP", year: 1993, description: "Vorwürfe, dass ein US-Forschungsprogramm zur Wetterveränderung und Gedankenkontrolle eingesetzt wird." },
+      { id: 404, title: "Solfeggio-Frequenzen", year: 1970, description: "Angeblich heilende Tonfrequenzen (wie 528 Hz), die spirituelle Transformation und DNA-Reparatur bewirken sollen." },
+      { id: 405, title: "Binaural Beats", year: 1980, description: "Töne unterschiedlicher Frequenzen auf beiden Ohren, die positiv auf Gehirnwellen wirken und Meditation, Heilung und Bewusstseinserweiterung fördern können." }
     ]
   },
   {
