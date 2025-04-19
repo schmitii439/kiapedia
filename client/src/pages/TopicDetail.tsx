@@ -25,6 +25,35 @@ import infoIcon from '@assets/info.png';
 import chemtrailsImg from '@assets/DALL·E 2025-04-08 05.09.55 - A subtle, realistic photomontage intended as a website background, depicting a high-altitude airplane dispersing visible chemtrails across a partly cl.webp';
 import geoEngineeringImg from '@assets/DALL·E 2025-04-08 05.11.19 - A subtle, realistic photomontage designed for a website background, illustrating the concept of geo-engineering without text. The image features a wid.webp';
 
+// Speech synthesis interfaces
+interface SpeechSynthesisVoice {
+  name: string;
+  lang: string;
+  localService: boolean;
+  default: boolean;
+}
+
+declare global {
+  interface Window {
+    speechSynthesis: {
+      speak: (utterance: any) => void;
+      cancel: () => void;
+      getVoices: () => SpeechSynthesisVoice[];
+      pause: () => void;
+      resume: () => void;
+    };
+    SpeechSynthesisUtterance: any;
+  }
+}
+
+// Comment interface
+interface Comment {
+  id: number;
+  author: string;
+  text: string;
+  timestamp: string;
+}
+
 const TopicDetail: React.FC = () => {
   const [match, params] = useRoute<{ id: string }>('/topic/:id');
   const { toast } = useToast();
@@ -58,6 +87,37 @@ const TopicDetail: React.FC = () => {
   const { data: glossaryTerms } = useQuery({ 
     queryKey: ['/api/glossary']
   });
+  
+  // UI States
+  const [truthStatus, setTruthStatus] = useState<'wahr' | 'unbestätigt' | 'widerlegt'>('unbestätigt');
+  const [files, setFiles] = useState<File[]>([]);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [showMetadata, setShowMetadata] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [speechSynthesis, setSpeechSynthesis] = useState<any>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  // Comment system state
+  const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
+  const [newComment, setNewComment] = useState('');
+  const [comments, setComments] = useState<Comment[]>([
+    { id: 1, author: 'Max M.', text: 'Das ist wirklich erschreckend. Ich denke, wir müssen mehr Menschen darüber informieren.', timestamp: '19.04.2025, 10:23' },
+    { id: 2, author: 'Sarah K.', text: 'Hat jemand Quellen zu den Behauptungen in Absatz 3? Würde gerne mehr darüber lesen.', timestamp: '19.04.2025, 11:45' },
+  ]);
+  
+  // New article state
+  const [isNewArticleModalOpen, setIsNewArticleModalOpen] = useState(false);
+  const [newArticleTitle, setNewArticleTitle] = useState('');
+  const [newArticleContent, setNewArticleContent] = useState('');
+  
+  // AI Analysis state
+  const [aiAnalysisOpen, setAiAnalysisOpen] = useState(false);
+  const [aiProviders] = useState([
+    { id: 'perplexity', name: 'Perplexity AI', icon: '🔮' },
+    { id: 'anthropic', name: 'Claude', icon: '🧠' },
+    { id: 'openai', name: 'GPT-4', icon: '✨' },
+  ]);
+  const [selectedAiProvider, setSelectedAiProvider] = useState({ id: 'perplexity', name: 'Perplexity AI', icon: '🔮' });
 
   // Show toast if topic not found
   useEffect(() => {
@@ -70,105 +130,6 @@ const TopicDetail: React.FC = () => {
     }
   }, [topicLoading, topic, topicId, toast]);
 
-  // Loading state
-  if (topicLoading || contentLoading) {
-    return (
-      <div className="py-8 px-4 max-w-5xl mx-auto">
-        <div className="flex items-center text-sm mb-6">
-          <Skeleton className="h-4 w-24" />
-          <Skeleton className="h-4 w-4 mx-2" />
-          <Skeleton className="h-4 w-32" />
-          <Skeleton className="h-4 w-4 mx-2" />
-          <Skeleton className="h-4 w-48" />
-        </div>
-        
-        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6 mb-8 dark:bg-gray-800 dark:border-gray-700">
-          <div className="flex justify-between items-start mb-6">
-            <div>
-              <Skeleton className="h-8 w-64 mb-2" />
-              <Skeleton className="h-4 w-48" />
-            </div>
-            <div className="flex space-x-2">
-              <Skeleton className="h-10 w-10 rounded-full" />
-              <Skeleton className="h-10 w-10 rounded-full" />
-            </div>
-          </div>
-          
-          <div className="space-y-4 mb-8">
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-3/4" />
-            <Skeleton className="h-6 w-48 mt-4" />
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-5/6" />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Handle case where topic doesn't exist
-  if (!topic) {
-    return (
-      <div className="py-8 px-4 max-w-5xl mx-auto">
-        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6 mb-8 dark:bg-gray-800 dark:border-gray-700 text-center">
-          <span className="material-icons text-4xl text-gray-400 mb-4">error_outline</span>
-          <h1 className="text-2xl font-semibold mb-2">Thema nicht gefunden</h1>
-          <p className="text-gray-600 mb-6 dark:text-gray-300">Das von Ihnen gesuchte Thema existiert nicht oder wurde gelöscht.</p>
-          <Link href="/conspiracy-theories" className="text-primary-600 hover:underline font-medium">
-            Zurück zur Übersicht
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
-  // Process content to add hover definitions for glossary terms
-  const processContent = (content: string) => {
-    if (!glossaryTerms || !content) return content;
-    
-    let processedContent = content;
-    
-    // Find and replace glossary terms with hover definition components
-    glossaryTerms.forEach(term => {
-      const regex = new RegExp(`\\b${term.term}\\b`, 'g');
-      processedContent = processedContent.replace(regex, `<span class="glossary-term" data-term="${term.term}">${term.term}</span>`);
-    });
-    
-    return processedContent;
-  };
-
-  // State for file upload and metadata display
-  const [files, setFiles] = useState<File[]>([]);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [showMetadata, setShowMetadata] = useState(false);
-  const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
-  const [isNewArticleModalOpen, setIsNewArticleModalOpen] = useState(false);
-  const [comments, setComments] = useState<{id: number, author: string, text: string, timestamp: string}[]>([]);
-  const [newComment, setNewComment] = useState("");
-  const [isSpeaking, setIsSpeaking] = useState(false);
-  const [speechSynthesis, setSpeechSynthesis] = useState<SpeechSynthesisUtterance | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [newArticleTitle, setNewArticleTitle] = useState("");
-  const [newArticleContent, setNewArticleContent] = useState("");
-  const [aiAnalysisOpen, setAiAnalysisOpen] = useState(false);
-  
-  // Alle verfügbaren KI-Provider für die Analyse
-  const aiProviders = [
-    { id: 'perplexity', name: 'Perplexity AI', icon: '🔮' },
-    { id: 'anthropic', name: 'Anthropic Claude', icon: '🧠' },
-    { id: 'openai', name: 'OpenAI GPT', icon: '🤖' }
-  ];
-  const [selectedAiProvider, setSelectedAiProvider] = useState(aiProviders[0]);
-
-  // Truth status based on topic id (in real app, would come from database)
-  const getTruthStatus = (id: number) => {
-    if (id % 3 === 0) return "wahr";
-    if (id % 3 === 1) return "unbestätigt";
-    return "unwahr";
-  };
-
   // Get topic-specific background image based on topic ID
   const getTopicImage = (id: number) => {
     // Chemtrails topic (ID: 101) uses the Chemtrails image
@@ -180,9 +141,6 @@ const TopicDetail: React.FC = () => {
     // Default: no specific image
     return null;
   };
-
-  const truthStatus = topic ? getTruthStatus(topic.id) : "unbestätigt";
-  const topicImage = topic ? getTopicImage(topic.id) : null;
 
   // Handle file upload
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -205,13 +163,15 @@ const TopicDetail: React.FC = () => {
 
   // Text-to-Speech Funktionalität
   const speakText = (text: string) => {
+    if (typeof window === 'undefined' || !window.speechSynthesis) return;
+  
     if (isSpeaking) {
       window.speechSynthesis.cancel();
       setIsSpeaking(false);
       return;
     }
     
-    const utterance = new SpeechSynthesisUtterance(text);
+    const utterance = new window.SpeechSynthesisUtterance(text);
     utterance.lang = 'de-DE';
     utterance.rate = 0.9; // Etwas langsamer für bessere Verständlichkeit
     utterance.pitch = 1.1; // Etwas höher für weiblichere Stimme
@@ -244,8 +204,8 @@ const TopicDetail: React.FC = () => {
   
   // Stoppen der Sprachausgabe
   const stopSpeaking = () => {
-    if (isSpeaking) {
-      window.speechSynthesis.cancel();
+    if (isSpeaking && typeof window !== 'undefined') {
+      window.speechSynthesis?.cancel();
       setIsSpeaking(false);
       setSpeechSynthesis(null);
     }
@@ -327,6 +287,64 @@ const TopicDetail: React.FC = () => {
     });
   };
 
+  // Loading state
+  if (topicLoading || contentLoading) {
+    return (
+      <div className="py-8 px-4 max-w-5xl mx-auto">
+        <div className="flex items-center text-sm mb-6">
+          <Skeleton className="h-4 w-24" />
+          <Skeleton className="h-4 w-4 mx-2" />
+          <Skeleton className="h-4 w-32" />
+          <Skeleton className="h-4 w-4 mx-2" />
+          <Skeleton className="h-4 w-48" />
+        </div>
+        
+        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6 mb-8 dark:bg-gray-800 dark:border-gray-700">
+          <div className="flex justify-between items-start mb-6">
+            <div>
+              <Skeleton className="h-8 w-64 mb-2" />
+              <Skeleton className="h-4 w-48" />
+            </div>
+            <div className="flex space-x-2">
+              <Skeleton className="h-10 w-10 rounded-full" />
+              <Skeleton className="h-10 w-10 rounded-full" />
+            </div>
+          </div>
+          
+          <div className="space-y-4 mb-8">
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-3/4" />
+            <Skeleton className="h-6 w-48 mt-4" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-5/6" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Handle case where topic doesn't exist
+  if (!topic) {
+    return (
+      <div className="py-8 px-4 max-w-5xl mx-auto">
+        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6 mb-8 dark:bg-gray-800 dark:border-gray-700 text-center">
+          <span className="material-icons text-4xl text-gray-400 mb-4">error_outline</span>
+          <h1 className="text-2xl font-semibold mb-2">Thema nicht gefunden</h1>
+          <p className="text-gray-600 mb-6 dark:text-gray-300">Das von Ihnen gesuchte Thema existiert nicht oder wurde gelöscht.</p>
+          <Link href="/categories" className="text-primary-600 hover:underline font-medium">
+            Zurück zur Übersicht
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // Determine truth status for this topic
+  const topicTruthStatus = topic.truthRating >= 7 ? 'wahr' : (topic.truthRating <= 3 ? 'widerlegt' : 'unbestätigt');
+  const topicImage = getTopicImage(topic.id);
+
   return (
     <div className="py-8 px-4 max-w-5xl mx-auto">
       {/* Navigation breadcrumbs */}
@@ -336,7 +354,7 @@ const TopicDetail: React.FC = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
       >
-        <Link href="/conspiracy-theories" className="text-cyan-400 hover:text-cyan-300 flex items-center transition-colors">
+        <Link href="/categories" className="text-cyan-400 hover:text-cyan-300 flex items-center transition-colors">
           <img src={backIcon} alt="Back" className="w-4 h-4 mr-1" />
           Zurück zur Übersicht
         </Link>
@@ -364,11 +382,11 @@ const TopicDetail: React.FC = () => {
               <p className="text-gray-300">
                 Erste Erwähnung: {topic.firstMentionedYear ? `ca. ${topic.firstMentionedYear}` : 'Unbekannt'}
               </p>
-              {truthStatus === "wahr" ? (
+              {topicTruthStatus === "wahr" ? (
                 <Badge variant="outline" className="bg-green-900/30 border-green-500/30 text-white flex items-center gap-1 px-3 py-1">
                   <img src={fireLvl1} alt="True" className="w-4 h-4" /> Wahr
                 </Badge>
-              ) : truthStatus === "unbestätigt" ? (
+              ) : topicTruthStatus === "unbestätigt" ? (
                 <Badge variant="outline" className="bg-yellow-900/30 border-yellow-500/30 text-white flex items-center gap-1 px-3 py-1">
                   <img src={fireLvl3} alt="Neutral" className="w-4 h-4" /> Unbestätigt
                 </Badge>
@@ -466,11 +484,11 @@ const TopicDetail: React.FC = () => {
             Wahrheitsbewertung
           </h3>
           
-          {truthStatus === "wahr" ? (
+          {topicTruthStatus === "wahr" ? (
             <div className="text-gray-200">
               <p>Diese Verschwörungstheorie gilt als bestätigt. Mehrere unabhängige Quellen und historische Dokumente haben die zentralen Behauptungen verifiziert.</p>
             </div>
-          ) : truthStatus === "unbestätigt" ? (
+          ) : topicTruthStatus === "unbestätigt" ? (
             <div className="text-gray-200">
               <p>Diese Verschwörungstheorie ist weder eindeutig bestätigt noch widerlegt. Es gibt Indizien, die für einige Aspekte sprechen, aber keine abschließenden Beweise.</p>
             </div>
@@ -538,7 +556,7 @@ const TopicDetail: React.FC = () => {
               className="bg-gray-800 p-6 rounded-lg border border-cyan-500/30 w-full max-w-2xl"
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
-              onClick={e => e.stopPropagation()}
+              onClick={(e) => e.stopPropagation()}
             >
               <div className="flex justify-between items-start mb-4">
                 <h3 className="text-xl font-semibold text-white">Metadaten: {selectedFile.name}</h3>
@@ -577,6 +595,7 @@ const TopicDetail: React.FC = () => {
           </motion.div>
         )}
         
+        {/* Related topics section */}
         {!relatedLoading && relatedTopics && relatedTopics.length > 0 && (
           <div className="border-t border-gray-200 pt-6 dark:border-gray-700">
             <h3 className="text-lg font-semibold mb-4">Verwandte Theorien</h3>
@@ -859,9 +878,9 @@ const TopicDetail: React.FC = () => {
                 <h4 className="text-lg font-medium text-white mb-3">Zusammenfassung</h4>
                 <p className="text-gray-300">
                   Nach Analyse aller verfügbaren Informationen zu "{topic?.title}" kommt die KI zu dem Schluss, dass diese Theorie 
-                  {truthStatus === "wahr" 
+                  {topicTruthStatus === "wahr" 
                     ? " tatsächlich durch ausreichend Beweise gestützt wird und als bestätigt gilt." 
-                    : truthStatus === "unbestätigt" 
+                    : topicTruthStatus === "unbestätigt" 
                       ? " nicht eindeutig bestätigt oder widerlegt werden kann, da einige Elemente zwar plausibel erscheinen, aber wesentliche Beweise fehlen." 
                       : " durch Fakten und historische Forschung widerlegt ist, wobei die meisten Behauptungen keiner systematischen Überprüfung standhalten."}
                 </p>

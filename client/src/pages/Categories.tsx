@@ -466,32 +466,33 @@ const Categories: React.FC = () => {
                   {category.topics.slice(0, 3).map((topic) => {
                     const truthIndicator = renderTruthIndicator(topic.id);
                     return (
-                      <motion.li 
-                        key={topic.id} 
-                        className="flex items-start p-2 rounded-lg hover:bg-gray-700/50 transition-colors"
-                        whileHover={{ x: 5 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                      >
-                        <motion.span 
-                          className={`${truthIndicator.className} p-1.5 rounded-full mr-3 mt-0.5 flex-shrink-0 border`}
-                          whileHover={{ scale: 1.2, rotate: 10 }}
+                      <Link href={`/topic/${topic.id}`} key={topic.id}>
+                        <motion.li 
+                          className="flex items-start p-2 rounded-lg hover:bg-gray-700/50 transition-colors cursor-pointer"
+                          whileHover={{ x: 5 }}
+                          transition={{ type: "spring", stiffness: 300 }}
                         >
-                          <img 
-                            src={truthIndicator.icon} 
-                            alt="Truth Level" 
-                            className="w-4 h-4" 
-                          />
-                        </motion.span>
-                        <div>
-                          <span className="text-white font-medium block">{topic.title}</span>
-                          <div className="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 text-gray-400 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            <span className="text-gray-400 text-sm">Erste Erwähnung: {topic.year}</span>
+                          <motion.span 
+                            className={`${truthIndicator.className} p-1.5 rounded-full mr-3 mt-0.5 flex-shrink-0 border`}
+                            whileHover={{ scale: 1.2, rotate: 10 }}
+                          >
+                            <img 
+                              src={truthIndicator.icon} 
+                              alt="Truth Level" 
+                              className="w-4 h-4" 
+                            />
+                          </motion.span>
+                          <div>
+                            <span className="text-white font-medium block">{topic.title}</span>
+                            <div className="flex items-center">
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 text-gray-400 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              </svg>
+                              <span className="text-gray-400 text-sm">Erste Erwähnung: {topic.year}</span>
+                            </div>
                           </div>
-                        </div>
-                      </motion.li>
+                        </motion.li>
+                      </Link>
                     );
                   })}
                 </ul>
