@@ -253,7 +253,7 @@ const CategoryDetail: React.FC = () => {
                 >
                   <FiFilter className="h-5 w-5" />
                 </motion.div>
-                Filtern nach Wahrheitsgrad
+                Filter
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
                 <motion.div 
@@ -327,9 +327,24 @@ const CategoryDetail: React.FC = () => {
                     onClick={() => setFilterTruth('unconfirmed')}
                     className={`w-full ${filterTruth === 'unconfirmed' ? 'bg-gray-700 hover:bg-gray-600' : 'border-cyan-500/30 text-cyan-400 hover:text-cyan-300'}`}
                   >
-                    <TbExclamationMark className="mr-1 inline-block" />
-                    <span className="hidden sm:inline">Nichts bestätigt</span>
+                    <span className="hidden sm:inline">Nicht bestätigt</span>
                     <span className="sm:hidden">N/A</span>
+                  </Button>
+                </motion.div>
+                
+                <motion.div 
+                  whileHover={{ scale: 1.05 }} 
+                  whileTap={{ scale: 0.95 }} 
+                  transition={{ type: "spring", stiffness: 400 }}
+                >
+                  <Button 
+                    variant={filterTruth === 'in_progress' ? 'default' : 'outline'} 
+                    size="sm"
+                    onClick={() => setFilterTruth('in_progress')}
+                    className={`w-full ${filterTruth === 'in_progress' ? 'bg-blue-700 hover:bg-blue-600' : 'border-cyan-500/30 text-cyan-400 hover:text-cyan-300'}`}
+                  >
+                    <span className="hidden sm:inline">In Bearbeitung</span>
+                    <span className="sm:hidden">...</span>
                   </Button>
                 </motion.div>
               </div>
